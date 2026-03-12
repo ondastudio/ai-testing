@@ -1,9 +1,9 @@
 <template>
-  <section class="relative min-h-screen bg-surface-page flex items-center justify-center overflow-hidden">
+  <section class="relative min-h-screen bg-surface-page flex items-center justify-center">
 
-    <!-- Blurred blob background -->
-    <!-- TODO: Download and replace with permanent asset in /public/images/hero-blob.png -->
-    <div class="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden="true">
+    <!-- Blurred blob — fixed so it stays in background while scrolling -->
+    <!-- TODO: Replace with permanent asset in /public/images/hero-blob.png -->
+    <div class="fixed inset-0 flex items-center justify-center pointer-events-none z-0" aria-hidden="true">
       <img
         src="https://www.figma.com/api/mcp/asset/1f3a81cf-6050-41e9-b33e-0a30604ac7f3"
         alt=""

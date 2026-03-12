@@ -30,10 +30,13 @@
   /* Colors */
   --color-text-highlighted: #045cfc;
   --color-text-body-primary: #403f4c;
+  --color-text-heading-primary: #403f4c;
+  --color-text-label-primary: #045cfc;
   --color-text-action-primary: #ffffff;
   --color-text-action-secondary: #403f4c;
   --color-text-action-inverted: #045cfc;
   --color-border-action: #045cfc;
+  --color-border-secondary: #d6edff;
   --color-surface-action: #045cfc;
   --color-surface-page: #f9fcff;
   --color-white: #ffffff;
@@ -48,25 +51,31 @@
   --font-weight-regular: 400;
 
   /* Typography — Font Sizes */
-  --font-size-h1: 4rem;         /* 64px */
-  --font-size-body-lg: 1.25rem; /* 20px */
-  --font-size-body-md: 1rem;    /* 16px */
+  --font-size-h1:      4rem;          /* 64px */
+  --font-size-h2:      3rem;          /* 48px */
+  --font-size-body-lg: 1.25rem;       /* 20px */
+  --font-size-body-md: 1rem;          /* 16px */
+  --font-size-body-xsm: 0.75rem;      /* 12px */
 
   /* Typography — Line Heights */
-  --line-height-h1: 4rem;        /* 64px */
-  --line-height-body-lg: 1.5rem; /* 24px */
-  --line-height-body-md: 1.25rem; /* 20px */
+  --line-height-h1:       4rem;        /* 64px */
+  --line-height-h2:       3.25rem;     /* 52px */
+  --line-height-body-lg:  1.5rem;      /* 24px */
+  --line-height-body-md:  1.25rem;     /* 20px */
+  --line-height-body-xsm: 0.875rem;    /* 14px */
 
   /* Typography — Letter Spacing */
-  --letter-spacing-h1: -0.02em;
-  --letter-spacing-body-lg: -0.02em;
-  --letter-spacing-body-md: 0em;
+  --letter-spacing-h1:       -0.02em;
+  --letter-spacing-h2:       -0.02em;
+  --letter-spacing-body-lg:  -0.02em;
+  --letter-spacing-body-md:  0em;
+  --letter-spacing-body-xsm: 0em;
 
   /* Spacing */
-  --spacing-sm: 0.75rem;   /* 12px */
-  --spacing-md: 1.5rem;    /* 24px */
-  --spacing-lg: 2.5rem;    /* 40px */
-  --spacing-xlg: 3.75rem;  /* 60px */
+  --spacing-sm:  0.75rem;   /* 12px */
+  --spacing-md:  1.5rem;    /* 24px */
+  --spacing-lg:  2.5rem;    /* 40px */
+  --spacing-xlg: 3.75rem;   /* 60px */
 
   /* Border */
   --border-radius-button: 44px;
@@ -101,6 +110,14 @@ html {
   letter-spacing: var(--letter-spacing-h1);
 }
 
+.text-h2 {
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-book);
+  font-size: var(--font-size-h2);
+  line-height: var(--line-height-h2);
+  letter-spacing: var(--letter-spacing-h2);
+}
+
 .text-body-lg {
   font-family: var(--font-family-secondary);
   font-weight: var(--font-weight-regular);
@@ -115,6 +132,14 @@ html {
   font-size: var(--font-size-body-md);
   line-height: var(--line-height-body-md);
   letter-spacing: var(--letter-spacing-body-md);
+}
+
+.text-body-xsm {
+  font-family: var(--font-family-secondary);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-body-xsm);
+  line-height: var(--line-height-body-xsm);
+  letter-spacing: var(--letter-spacing-body-xsm);
 }
 
 /* ============================================================
@@ -138,4 +163,23 @@ html {
 .reveal-fade.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ============================================================
+   MARQUEE
+   ============================================================ */
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 24s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
 }
