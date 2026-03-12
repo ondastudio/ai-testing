@@ -1,14 +1,14 @@
 <template>
-  <nav class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-[1280px] max-w-[calc(100vw-2rem)]">
+  <nav class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-container px-6">
     <div class="bg-white/80 backdrop-blur-sm flex items-center justify-between pl-8 pr-2 py-2 rounded-[200px]">
 
-      <!-- Logo -->
-      <!-- TODO: Replace with permanent logo asset in /public/images/logo.svg -->
-      <img
-        src="https://www.figma.com/api/mcp/asset/61eba48b-305e-4eb7-aca8-52d340f154fc"
-        alt="Subvisual"
-        class="h-[25px] w-auto shrink-0"
-      />
+      <!-- Logo — TODO: replace with /public/images/logo.svg once available -->
+      <a href="/" class="shrink-0 flex items-center">
+        <span
+          class="font-secondary text-text-highlighted whitespace-nowrap"
+          style="font-size: 1.125rem; font-weight: 700; letter-spacing: -0.02em;"
+        >Subvisual</span>
+      </a>
 
       <!-- Nav Links + CTA -->
       <div class="flex items-center gap-11">

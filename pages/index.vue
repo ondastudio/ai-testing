@@ -1,7 +1,7 @@
 <template>
   <main>
     <HeroSection />
-    <TrustedBySection />
+    <IntroSection />
     <TheNavbar />
   </main>
 </template>

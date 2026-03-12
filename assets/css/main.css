@@ -28,41 +28,41 @@
 
 :root {
   /* Colors */
-  --color-text-highlighted: #045cfc;
-  --color-text-body-primary: #403f4c;
-  --color-text-heading-primary: #403f4c;
-  --color-text-label-primary: #045cfc;
+  --color-text-highlighted:    #045cfc;
+  --color-text-body-primary:   #403f4c;
+  --color-text-heading-primary:#403f4c;
+  --color-text-label-primary:  #045cfc;
   --color-text-action-primary: #ffffff;
-  --color-text-action-secondary: #403f4c;
-  --color-text-action-inverted: #045cfc;
-  --color-border-action: #045cfc;
-  --color-border-secondary: #d6edff;
-  --color-surface-action: #045cfc;
-  --color-surface-page: #f9fcff;
-  --color-white: #ffffff;
-  --color-black: #403f4c;
+  --color-text-action-secondary:#403f4c;
+  --color-text-action-inverted:#045cfc;
+  --color-border-action:       #045cfc;
+  --color-border-secondary:    #d6edff;
+  --color-surface-action:      #045cfc;
+  --color-surface-page:        #f9fcff;
+  --color-white:               #ffffff;
+  --color-black:               #403f4c;
 
   /* Typography — Font Families */
-  --font-family-primary: 'Acta', Georgia, serif;
+  --font-family-primary:   'Acta', Georgia, serif;
   --font-family-secondary: 'Colfax', system-ui, sans-serif;
 
   /* Typography — Font Weights */
-  --font-weight-book: 400;
+  --font-weight-book:    400;
   --font-weight-regular: 400;
 
   /* Typography — Font Sizes */
-  --font-size-h1:      4rem;          /* 64px */
-  --font-size-h2:      3rem;          /* 48px */
-  --font-size-body-lg: 1.25rem;       /* 20px */
-  --font-size-body-md: 1rem;          /* 16px */
-  --font-size-body-xsm: 0.75rem;      /* 12px */
+  --font-size-h1:       4rem;       /* 64px */
+  --font-size-h2:       3rem;       /* 48px */
+  --font-size-body-lg:  1.25rem;    /* 20px */
+  --font-size-body-md:  1rem;       /* 16px */
+  --font-size-body-xsm: 0.75rem;    /* 12px */
 
   /* Typography — Line Heights */
-  --line-height-h1:       4rem;        /* 64px */
-  --line-height-h2:       3.25rem;     /* 52px */
-  --line-height-body-lg:  1.5rem;      /* 24px */
-  --line-height-body-md:  1.25rem;     /* 20px */
-  --line-height-body-xsm: 0.875rem;    /* 14px */
+  --line-height-h1:       4rem;      /* 64px */
+  --line-height-h2:       3.25rem;   /* 52px */
+  --line-height-body-lg:  1.5rem;    /* 24px */
+  --line-height-body-md:  1.25rem;   /* 20px */
+  --line-height-body-xsm: 0.875rem;  /* 14px */
 
   /* Typography — Letter Spacing */
   --letter-spacing-h1:       -0.02em;
@@ -72,14 +72,18 @@
   --letter-spacing-body-xsm: 0em;
 
   /* Spacing */
-  --spacing-sm:  0.75rem;   /* 12px */
-  --spacing-md:  1.5rem;    /* 24px */
-  --spacing-lg:  2.5rem;    /* 40px */
-  --spacing-xlg: 3.75rem;   /* 60px */
+  --spacing-sm:  0.75rem;    /* 12px */
+  --spacing-md:  1.5rem;     /* 24px */
+  --spacing-lg:  2.5rem;     /* 40px */
+  --spacing-xlg: 3.75rem;    /* 60px */
+
+  /* Layout */
+  --container-max: 1260px;
+  --container-px:  1.5rem;
 
   /* Border */
   --border-radius-button: 44px;
-  --border-stroke-sm: 1px;
+  --border-stroke-sm:     1px;
 }
 
 /* ============================================================
@@ -96,6 +100,25 @@ html {
   font-family: var(--font-family-secondary);
   background-color: var(--color-surface-page);
   color: var(--color-text-body-primary);
+}
+
+/* ============================================================
+   CONTAINER  — max 1260px, centered, 12-col grid
+   ============================================================ */
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-px);
+  padding-right: var(--container-px);
+}
+
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--spacing-md);
 }
 
 /* ============================================================
@@ -145,7 +168,7 @@ html {
 /* ============================================================
    SCROLL REVEAL ANIMATIONS
    — .reveal-title : fade-in + Y axis movement (for headings)
-   — .reveal-fade  : fade-in only (for paragraphs, buttons, images)
+   — .reveal-fade  : fade-in only (paragraphs, buttons, images)
    ============================================================ */
 
 .reveal-title {
@@ -176,8 +199,9 @@ html {
 
 .marquee-track {
   display: flex;
+  align-items: center;
   width: max-content;
-  animation: marquee 24s linear infinite;
+  animation: marquee 28s linear infinite;
 }
 
 .marquee-track:hover {
