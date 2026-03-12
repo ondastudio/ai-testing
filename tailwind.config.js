@@ -20,6 +20,7 @@ export default {
         'border-action':        'var(--color-border-action)',
         'border-secondary':     'var(--color-border-secondary)',
         'surface-action':       'var(--color-surface-action)',
+        'surface-secondary':    'var(--color-surface-secondary)',
         'surface-page':         'var(--color-surface-page)',
         'brand-white':          'var(--color-white)',
         'brand-black':          'var(--color-black)',
@@ -31,6 +32,7 @@ export default {
       fontSize: {
         'h1':       ['var(--font-size-h1)',       { lineHeight: 'var(--line-height-h1)',       letterSpacing: 'var(--letter-spacing-h1)' }],
         'h2':       ['var(--font-size-h2)',       { lineHeight: 'var(--line-height-h2)',       letterSpacing: 'var(--letter-spacing-h2)' }],
+        'h3':       ['var(--font-size-h3)',       { lineHeight: 'var(--line-height-h3)',       letterSpacing: 'var(--letter-spacing-h3)' }],
         'body-lg':  ['var(--font-size-body-lg)',  { lineHeight: 'var(--line-height-body-lg)',  letterSpacing: 'var(--letter-spacing-body-lg)' }],
         'body-md':  ['var(--font-size-body-md)',  { lineHeight: 'var(--line-height-body-md)',  letterSpacing: 'var(--letter-spacing-body-md)' }],
         'body-xsm': ['var(--font-size-body-xsm)', { lineHeight: 'var(--line-height-body-xsm)', letterSpacing: 'var(--letter-spacing-body-xsm)' }],
@@ -51,3 +53,4 @@ export default {
   },
   plugins: [],
 }
+
