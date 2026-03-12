@@ -297,7 +297,8 @@ const InfoSection = defineComponent({
   @apply relative w-[479px] h-[648px] flex-shrink-0 overflow-hidden rounded-[16px];
 }
 .video-btn-stop {
-  @apply absolute bottom-6 left-1/2 -translate-x-1/2 bg-white w-12 h-12 rounded-full flex items-center justify-center text-text-heading-primary hover:opacity-80 transition-opacity;
+  @apply absolute bottom-6 left-1/2 -translate-x-1/2 bg-white w-12 h-12 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity;
+  color: var(--color-text-heading-primary);
 }
 .video-btn-collapse {
   @apply absolute top-6 right-6 bg-surface-action w-12 h-12 rounded-button flex items-center justify-center hover:opacity-80 transition-opacity;
@@ -313,3 +314,4 @@ const InfoSection = defineComponent({
   opacity: 0;
 }
 </style>
+
