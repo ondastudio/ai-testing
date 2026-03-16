@@ -4,6 +4,7 @@
     <IntroSection />
     <PathSection />
     <ProjectsSection />
+    <ProofSection />
     <TheNavbar />
   </main>
 </template>
