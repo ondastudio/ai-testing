@@ -32,11 +32,11 @@
 ## Design to Code
 - Follow the grid of the design 
 - Use a max-container of 1600px, if there's a background color or asset it should be outside of the container and fill the width of the screen
-- 
+- Create variables and use them as much as possible 
 
 ## Animation Styles
-- The titles should have a fade-in + small movement on y axis triggered by line 
-- The others elements (<p> , marquee, images, buttons etc) should have a fade-in
+- The titles should have a fade-in and a small movement on y axis triggered by line 
+- The others elements (paragraph, marquee, images, buttons etc) should have a fade-in
 - The project should use lenis scroll
                                                                                                                                                                                                                                                
 ## Do Not                                                                                                                                                                                                                                      
