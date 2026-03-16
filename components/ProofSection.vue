@@ -1,78 +1,82 @@
 <template>
-  <!--
-    Scroll space: rows activate blue one by one as you scroll.
-    Section stays sticky while scroll space is consumed.
-  -->
-  <div ref="sectionRef" :style="{ height: sectionHeight }">
-    <div class="sticky top-0 min-h-screen bg-surface-page flex items-center overflow-hidden py-[60px]">
-      <div class="container flex flex-col gap-[120px]">
+  <section class="bg-surface-page py-[60px]">
+    <div class="container flex flex-col gap-[120px]">
 
-        <!-- ── Proof rows ──────────────────────────────────────────────── -->
-        <div class="flex flex-col gap-lg">
+      <!-- Proof rows -->
+      <div class="flex flex-col gap-lg">
 
-          <!-- Label -->
-          <p class="reveal-fade text-body-xsm font-secondary text-text-label-primary uppercase" :class="{ 'is-visible': isVisible }">
-            proof and recognition
-          </p>
+        <!-- Label — centred -->
+        <p class="reveal-fade text-body-xsm font-secondary text-text-label-primary uppercase text-center" :class="{ 'is-visible': isVisible }">
+          proof and recognition
+        </p>
 
-          <!-- Rows -->
-          <div class="flex flex-col">
-            <div
-              v-for="(item, i) in items"
-              :key="item.id"
-              class="flex gap-[131px] items-center border-t border-border-secondary"
-            >
-              <!-- Icon -->
-              <div class="shrink-0 w-8 h-8 flex items-center justify-center">
-                <img :src="item.icon" :alt="item.label" class="w-full h-full object-contain" />
-              </div>
-
-              <!-- Text -->
-              <div class="flex-1 border-l border-border-secondary px-lg py-lg">
-                <p
-                  class="text-h2 font-primary tracking-[-0.96px] transition-colors duration-700"
-                  :class="i <= activeRow ? 'text-text-highlighted' : 'text-text-heading-primary'"
-                >
-                  {{ item.text }}
-                </p>
-              </div>
+        <!--
+          Stacking rows: each row is position:sticky with an incrementally
+          higher top value so they physically stack on top of each other as
+          you scroll — exactly like the cards on native.inc.
+          z-index increases per row so later cards sit above earlier ones.
+          bg-surface-page covers the row behind when stacked.
+        -->
+        <div>
+          <div
+            v-for="(item, i) in items"
+            :key="item.id"
+            :ref="(el) => setRowRef(el as HTMLElement | null, i)"
+            class="sticky bg-surface-page border-t border-border-secondary flex gap-[131px] items-center"
+            :style="{ top: `${STACK_BASE + i * STACK_STEP}px`, zIndex: i + 1 }"
+          >
+            <!-- Icon -->
+            <div class="py-lg shrink-0 flex items-center justify-center w-8 h-8">
+              <img :src="item.icon" :alt="item.label" class="w-full h-full object-contain" />
             </div>
-          </div>
 
-        </div>
-
-        <!-- ── Testimonial card ────────────────────────────────────────── -->
-        <div class="reveal-fade bg-surface-action rounded-[16px] overflow-hidden relative" style="height: 692px" :class="{ 'is-visible': isVisible }">
-          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-[80px] items-center w-[954px]">
-
-            <!-- Label -->
-            <p class="text-body-xsm font-secondary text-white uppercase tracking-wide">
-              what our clients say
-            </p>
-
-            <!-- Quote block -->
-            <div class="flex flex-col gap-[60px] items-center">
-              <p class="text-h1 font-primary text-white text-center tracking-[-0.02em] w-[796px]">
-                "We … got the product built on time; we found a highly engaged team."
+            <!-- Text -->
+            <div class="flex-1 border-l border-border-secondary px-lg py-lg">
+              <p
+                class="text-h2 font-primary tracking-[-0.96px] transition-colors duration-700"
+                :class="activeRows.has(i) ? 'text-text-highlighted' : 'text-text-heading-primary'"
+              >
+                {{ item.text }}
               </p>
-              <div class="flex flex-col items-center">
-                <p class="text-body-md font-secondary text-white text-center">Rui Silva,</p>
-                <p class="text-body-md font-secondary text-white text-center">
-                  EVP Product, <span class="underline">Uphold</span>
-                </p>
-              </div>
             </div>
-
           </div>
         </div>
 
       </div>
+
+      <!-- Testimonial card -->
+      <div
+        class="reveal-fade bg-surface-action rounded-[16px] overflow-hidden relative"
+        style="height: 692px"
+        :class="{ 'is-visible': isVisible }"
+      >
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-[80px] items-center w-[954px]">
+
+          <p class="text-body-xsm font-secondary text-white uppercase tracking-wide">
+            what our clients say
+          </p>
+
+          <div class="flex flex-col gap-[60px] items-center">
+            <p class="text-h1 font-primary text-white text-center w-[796px]">
+              "We … got the product built on time; we found a highly engaged team."
+            </p>
+            <div class="flex flex-col items-center gap-1">
+              <p class="text-body-md font-secondary text-white text-center">Rui Silva,</p>
+              <p class="text-body-md font-secondary text-white text-center">
+                EVP Product, <span class="underline">Uphold</span>
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 
 const items = [
   {
@@ -101,27 +105,30 @@ const items = [
   },
 ]
 
-// Extra scroll ticks: one per row + buffer at start and end
-const TICKS = items.length + 2
+// Each row sticks STACK_STEP px below the previous one,
+// creating a cascading deck effect on scroll.
+const STACK_BASE = 80  // top offset for the first row (px)
+const STACK_STEP = 64  // how many px each subsequent row is lower (px)
 
-const sectionRef  = ref<HTMLElement | null>(null)
-const scrollRatio = ref(0)
-const isVisible   = ref(false)
+const rowRefs   = ref<(HTMLElement | null)[]>([])
+const activeRows = ref<Set<number>>(new Set())
+const isVisible  = ref(false)
 
-// -1 = none active; 0..3 = rows activated up to this index
-const activeRow = computed(() =>
-  Math.min(Math.floor(scrollRatio.value * TICKS) - 1, items.length - 1)
-)
-
-// Section is tall enough to scroll through each row activation
-const sectionHeight = computed(() => `${TICKS * 50}vh`)
+function setRowRef(el: HTMLElement | null, i: number) {
+  rowRefs.value[i] = el
+}
 
 function onScroll() {
-  const el = sectionRef.value
-  if (!el) return
-  const { top, height } = el.getBoundingClientRect()
-  const scrollable = height - window.innerHeight
-  scrollRatio.value = Math.max(0, Math.min(1, -top / scrollable))
+  const next = new Set<number>()
+  rowRefs.value.forEach((el, i) => {
+    if (!el) return
+    const stickyTop = STACK_BASE + i * STACK_STEP
+    // Row is "stacked" once its top edge has reached its sticky threshold
+    if (el.getBoundingClientRect().top <= stickyTop + 2) {
+      next.add(i)
+    }
+  })
+  activeRows.value = next
 }
 
 onMounted(() => {
