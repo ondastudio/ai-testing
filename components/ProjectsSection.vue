@@ -1,82 +1,68 @@
 <template>
   <div ref="sectionRef" :style="{ height: `${projects.length * 100}vh` }">
     <div class="sticky top-0 h-screen overflow-hidden bg-surface-page flex items-center">
+      <div class="container">
 
-      <div class="relative w-full">
-        <Transition name="proj" mode="out-in" @enter="onEnter">
-          <div :key="activeIndex" class="container flex flex-col gap-md">
+        <!-- Fixed-height wrapper so crossfading slides stack on same space -->
+        <div class="relative" style="height: calc(692px + 2rem + 40px)">
+          <Transition name="crossfade">
+            <div :key="activeIndex" class="absolute inset-0 flex flex-col gap-md">
 
-            <!-- ── Image card (entire area clickable) ──────────────────── -->
-            <NuxtLink :to="active.url" class="block group cursor-pointer">
-              <!--
-                Dark card: screenshot centred with dark padding around it.
-                Progress bar sits inside the card over the dark padding on the right.
-                Figma: card 1408px, bar 40px inset from card right edge.
-              -->
-              <div class="relative bg-black rounded-[16px] overflow-hidden" style="height: 692px">
+              <!-- ── Image card (entire area clickable) ─────────────────── -->
+              <NuxtLink :to="active.url" class="block group cursor-pointer">
+                <div class="relative bg-black rounded-[16px] overflow-hidden" style="height: 692px">
 
-                <!-- Screenshot — centred, not full-bleed -->
-                <div
-                  class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden"
-                  style="width: 83.3%; height: 94.5%"
-                >
-                  <img
-                    :src="active.image"
-                    :alt="active.title"
-                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-                  />
-                </div>
-
-                <!-- Progress bar — fills relative to full carousel progress -->
-                <div
-                  class="absolute top-1/2 -translate-y-1/2 pointer-events-none z-10"
-                  style="right: 40px"
-                >
+                  <!-- Screenshot centred in dark card (83.3% × 94.5% of card) -->
                   <div
-                    class="relative rounded-full"
-                    style="width: 4px; height: 80px; background: #525252"
+                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden"
+                    style="width: 83.3%; height: 94.5%"
                   >
-                    <div
-                      class="absolute top-0 left-0 w-full rounded-full bg-white"
-                      :style="{ height: fillPx + 'px' }"
+                    <img
+                      :src="active.image"
+                      :alt="active.title"
+                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                     />
                   </div>
+
+                  <!-- Progress bar — carousel progress, right side of dark card -->
+                  <div
+                    class="absolute top-1/2 -translate-y-1/2 pointer-events-none z-10"
+                    style="right: 40px"
+                  >
+                    <div class="relative rounded-full" style="width: 4px; height: 80px; background: #525252">
+                      <div
+                        class="absolute top-0 left-0 w-full rounded-full bg-white"
+                        :style="{ height: fillPx + 'px' }"
+                      />
+                    </div>
+                  </div>
+
                 </div>
-
-              </div>
-            </NuxtLink>
-
-            <!-- ── Copy row ─────────────────────────────────────────────── -->
-            <div class="flex items-end justify-between">
-
-              <NuxtLink
-                :to="active.url"
-                class="reveal-title"
-                :class="{ 'is-visible': isVisible }"
-              >
-                <h3 class="text-h3 font-primary text-text-heading-primary hover:text-text-highlighted transition-colors duration-200">
-                  {{ active.title }}
-                </h3>
               </NuxtLink>
 
-              <p
-                class="reveal-fade font-secondary text-body-md text-text-body-primary max-w-[630px]"
-                :class="{ 'is-visible': isVisible }"
-              >
-                {{ active.description }}
-              </p>
+              <!-- ── Copy row ─────────────────────────────────────────── -->
+              <div class="flex items-end justify-between">
+                <NuxtLink :to="active.url">
+                  <h3 class="text-h3 font-primary text-text-heading-primary hover:text-text-highlighted transition-colors duration-200">
+                    {{ active.title }}
+                  </h3>
+                </NuxtLink>
+                <p class="font-secondary text-body-md text-text-body-primary max-w-[630px]">
+                  {{ active.description }}
+                </p>
+              </div>
 
             </div>
-          </div>
-        </Transition>
-      </div>
+          </Transition>
+        </div>
 
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const projects = [
   {
@@ -107,9 +93,7 @@ const TRACK_H = 80
 
 const sectionRef  = ref<HTMLElement | null>(null)
 const scrollRatio = ref(0)
-const isVisible   = ref(false)
 
-// Overall carousel progress 0→1 drives the fill
 const fillPx = computed(() => Math.round(scrollRatio.value * TRACK_H))
 
 const activeIndex = computed(() =>
@@ -126,23 +110,21 @@ function onScroll() {
   scrollRatio.value = Math.max(0, Math.min(1, -top / scrollable))
 }
 
-watch(activeIndex, () => { isVisible.value = false })
-
-function onEnter() {
-  nextTick(() => setTimeout(() => { isVisible.value = true }, 50))
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', onScroll, { passive: true })
-  setTimeout(() => { isVisible.value = true }, 100)
-})
-
+onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }))
 onUnmounted(() => window.removeEventListener('scroll', onScroll))
 </script>
 
 <style scoped>
-.proj-enter-active { transition: opacity 0.5s ease, transform 0.5s ease; }
-.proj-leave-active { transition: opacity 0.25s ease; }
-.proj-enter-from   { opacity: 0; transform: translateY(24px); }
-.proj-leave-to     { opacity: 0; }
+/* Both slides present at the same time → true crossfade */
+.crossfade-enter-active,
+.crossfade-leave-active {
+  transition: opacity 0.6s ease;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+}
+.crossfade-enter-from,
+.crossfade-leave-to {
+  opacity: 0;
+}
 </style>
