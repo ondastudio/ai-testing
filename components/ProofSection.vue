@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-surface-page py-[60px]">
+  <section class="py-[60px]">
     <div class="container flex flex-col gap-[120px]">
 
       <!-- Proof rows -->
@@ -22,7 +22,7 @@
             v-for="(item, i) in items"
             :key="item.id"
             :ref="(el) => setRowRef(el as HTMLElement | null, i)"
-            class="sticky bg-surface-page border-t border-border-secondary flex gap-[131px] items-center"
+            class="sticky border-t border-border-secondary flex gap-[131px] items-center"
             :style="{ top: `${STACK_BASE + i * STACK_STEP}px`, zIndex: i + 1 }"
           >
             <!-- Icon -->
