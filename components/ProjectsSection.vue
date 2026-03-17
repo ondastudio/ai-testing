@@ -1,6 +1,6 @@
 <template>
   <div ref="sectionRef" :style="{ height: `${projects.length * 100}vh` }">
-    <div class="sticky top-0 h-screen overflow-hidden bg-surface-page flex items-center">
+    <div class="sticky top-0 h-screen overflow-hidden flex items-center">
       <div class="container">
 
         <!-- Fixed-height wrapper so crossfading slides stack on same space -->
