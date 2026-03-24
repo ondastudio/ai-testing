@@ -1,0 +1,60 @@
+{
+  "id": "home",
+  "label": "Home",
+  "repeatable": false,
+  "status": true,
+  "format": "custom",
+  "json": {
+    "Main": {
+      "faqs": {
+        "type": "Group",
+        "config": {
+          "label": "FAQs",
+          "fields": {
+            "number": {
+              "type": "Text",
+              "config": {
+                "label": "Number",
+                "placeholder": "01"
+              }
+            },
+            "question": {
+              "type": "Text",
+              "config": {
+                "label": "Question",
+                "placeholder": "What is Subvisual?"
+              }
+            },
+            "answer": {
+              "type": "Text",
+              "config": {
+                "label": "Answer",
+                "placeholder": "A product and venture studio."
+              }
+            },
+            "is_link": {
+              "type": "Boolean",
+              "config": {
+                "label": "Is Link",
+                "default_value": false,
+                "placeholder_true": "Yes",
+                "placeholder_false": "No"
+              }
+            },
+            "link": {
+              "type": "Link",
+              "config": {
+                "label": "Link",
+                "placeholder": "",
+                "select": null,
+                "allowTargetBlank": true,
+                "allowText": true,
+                "repeat": false
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

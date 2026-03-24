@@ -8,8 +8,7 @@
   font-family: 'Acta';
   font-style: normal;
   font-weight: 400;
-  src: url('/fonts/Acta-Book.woff2') format('woff2'),
-       url('/fonts/Acta-Book.woff') format('woff');
+  src: url('../fonts/Acta-Book.woff2') format('woff2');
   font-display: swap;
 }
 
@@ -17,8 +16,15 @@
   font-family: 'Colfax';
   font-style: normal;
   font-weight: 400;
-  src: url('/fonts/Colfax-Regular.woff2') format('woff2'),
-       url('/fonts/Colfax-Regular.woff') format('woff');
+  src: url('../fonts/Colfax-Regular.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Colfax';
+  font-style: normal;
+  font-weight: 500;
+  src: url('../fonts/Colfax-Medium.woff2') format('woff2');
   font-display: swap;
 }
 
@@ -42,6 +48,20 @@
   --color-surface-page:        #f9fcff;
   --color-white:               #ffffff;
   --color-black:               #403f4c;
+
+  /* Brand palette — raw colours */
+  --color-blue:        #045cfc;
+  --color-dark-blue:   #2421ab;
+  --color-purple:      #9563ff;
+  --color-pink:        #f3809c;
+
+  /* Semantic aliases for new brand colours */
+  --color-text-dark-blue:   #2421ab;
+  --color-text-purple:      #9563ff;
+  --color-text-pink:        #f3809c;
+  --color-surface-dark-blue:#2421ab;
+  --color-surface-purple:   #9563ff;
+  --color-surface-pink:     #f3809c;
 
   /* Typography — Font Families */
   --font-family-primary:   'Acta', Georgia, serif;
@@ -75,12 +95,16 @@
   --letter-spacing-body-md:  0em;
   --letter-spacing-body-xsm: 0em;
 
-  /* Spacing */
-  --spacing-xsm: 1rem;       /* 16px */
-  --spacing-sm:  1.5rem;     /* 24px */
-  --spacing-md:  2rem;       /* 32px */
-  --spacing-lg:  2.5rem;     /* 40px */
-  --spacing-xlg: 3.75rem;    /* 60px */
+  /* Spacing — desktop */
+  --spacing-3xsm: 0.75rem;   /* 12px */
+  --spacing-2xsm: 0.5rem;    /* 8px */
+  --spacing-xsm:  1rem;      /* 16px */
+  --spacing-sm:   1.5rem;    /* 24px */
+  --spacing-md:   2rem;      /* 32px */
+  --spacing-lg:   2.5rem;    /* 40px */
+  --spacing-xlg:  3.75rem;   /* 60px */
+  --spacing-2xlg: 5rem;      /* 80px */
+  --spacing-3xlg: 7.5rem;    /* 120px */
 
   /* Layout */
   --container-max: 1260px;
@@ -88,7 +112,46 @@
 
   /* Border */
   --border-radius-button: 44px;
+  --border-radius-card:   1rem;     /* 16px */
   --border-stroke-sm:     1px;
+
+  /* Component sizing */
+  --hero-blob-max:       46.25rem;  /* 740px */
+  --video-thumb-size:    7.5rem;    /* 120px */
+  --video-panel-w:       29.9375rem;/* 479px */
+  --video-panel-h:       40.5rem;   /* 648px */
+  --expanded-content-w:  36rem;     /* 576px */
+  --proof-row-gap:       8.1875rem; /* 131px */
+  --carousel-card-h:     692px;
+  --footer-inner-gap:    6.25rem;   /* 100px */
+  --footer-links-gap:    7.25rem;   /* 116px */
+  --footer-newsletter-w: 27.375rem; /* 438px */
+  --footer-input-w:      19.4375rem;/* 311px */
+}
+
+/* ============================================================
+   RESPONSIVE TOKENS
+   ============================================================ */
+
+@media (max-width: 768px) {
+  :root {
+    /* Typography */
+    --font-size-h1:    2.25rem;   /* scale down on mobile */
+    --font-size-h2:    1.75rem;
+    --font-size-h3:    1.375rem;
+
+    /* Spacing — mobile (from Figma style guide) */
+    --spacing-sm:      1.25rem;   /* 20px */
+    --spacing-md:      1.75rem;   /* 28px */
+    --spacing-lg:      2.25rem;   /* 36px */
+    --spacing-xlg:     3.5rem;    /* 56px */
+    --spacing-2xlg:    3.75rem;   /* 60px */
+    --spacing-3xlg:    6rem;      /* 96px */
+
+    /* Layout */
+    --container-px:    1rem;
+    --proof-row-gap:   2rem;
+  }
 }
 
 /* ============================================================
@@ -185,16 +248,42 @@ html {
 .reveal-title {
   opacity: 0;
   transform: translateY(32px);
-  transition: opacity 0.9s ease, transform 0.9s ease;
+  transition: opacity 1.4s ease, transform 1.4s ease;
 }
 
 .reveal-fade {
   opacity: 0;
-  transition: opacity 0.9s ease;
+  transition: opacity 1.4s ease;
+}
+
+.reveal-slide {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 1.2s ease, transform 1.2s ease;
 }
 
 .reveal-title.is-visible,
-.reveal-fade.is-visible {
+.reveal-fade.is-visible,
+.reveal-slide.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Line-by-line word reveal ─────────────────────────────────────────────── */
+
+.rv-word {
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.rv-word-inner {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+.rv-word-inner.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
@@ -208,9 +297,27 @@ html {
   to   { transform: translateX(-50%); }
 }
 
+.hero-blob {
+  width: 70vw;
+  aspect-ratio: 1 / 1;
+}
+
+@media (min-width: 768px) {
+  .hero-blob {
+    width: 50vw;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-blob {
+    width: min(46.25rem, 50vw);
+  }
+}
+
 .marquee-track {
   display: flex;
   align-items: center;
+  gap: var(--spacing-xlg);
   width: max-content;
   animation: marquee 28s linear infinite;
 }

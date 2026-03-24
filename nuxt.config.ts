@@ -1,9 +1,12 @@
+import { apiEndpoint, repositoryName } from "./slicemachine.config.json";
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss'],
+  modules: ['@nuxtjs/tailwindcss', "@nuxtjs/prismic"],
   css: ['~/assets/css/main.css'],
+
   app: {
     head: {
+      title: "Subvisual",
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.svg' },
@@ -17,4 +20,8 @@ export default defineNuxtConfig({
       ],
     },
   },
+
+  prismic: {
+    endpoint: apiEndpoint || repositoryName
+  }
 })

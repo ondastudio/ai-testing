@@ -1,7 +1,7 @@
 <template>
-  <footer class="pb-[120px] pt-[2px]">
+  <footer class="pb-3xlg pt-[2px]">
     <div class="container">
-      <div class="bg-surface-action rounded-[16px] px-8 py-[60px] flex items-stretch gap-[100px] overflow-hidden">
+      <div class="bg-surface-action px-8 py-xlg flex items-stretch overflow-hidden" style="border-radius: var(--border-radius-card); gap: var(--footer-inner-gap)">
 
         <!-- ── Left: tagline + copyright ──────────────────────────────────── -->
         <div class="flex flex-col justify-between shrink-0">
@@ -14,7 +14,7 @@
         </div>
 
         <!-- ── Content: links + newsletter/logos ──────────────────────────── -->
-        <div class="flex-1 flex items-start justify-end gap-[116px]">
+        <div class="flex-1 flex items-start justify-end" style="gap: var(--footer-links-gap)">
 
           <!-- Links: Social + Legal -->
           <div class="flex items-start gap-6 shrink-0">
@@ -42,7 +42,7 @@
           </div>
 
           <!-- Newsletter + Logos -->
-          <div class="flex flex-col justify-between w-[438px] self-stretch shrink-0">
+          <div class="flex flex-col justify-between self-stretch shrink-0" style="width: var(--footer-newsletter-w)">
 
             <!-- Newsletter input -->
             <div class="flex flex-col gap-6">
@@ -50,23 +50,7 @@
                 Get occasional notes from the team and<br />
                 the Sandbox Playbook.
               </p>
-              <div class="bg-brand-white flex items-center pl-6 pr-[2px] py-[2px] rounded-full w-[311px]">
-                <input
-                  v-model="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  class="flex-1 min-w-0 text-body-md font-secondary text-text-body-primary bg-transparent outline-none placeholder:text-text-action-secondary"
-                />
-                <button
-                  @click="subscribe"
-                  aria-label="Subscribe"
-                  class="bg-surface-action w-12 h-12 rounded-full flex items-center justify-center shrink-0 hover:opacity-80 transition-opacity"
-                >
-                  <svg viewBox="0 0 20 20" class="w-5 h-5 fill-brand-white" aria-hidden="true">
-                    <path d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"/>
-                  </svg>
-                </button>
-              </div>
+              <AppInput type="email" @submit="subscribe" submit-label="Subscribe" />
             </div>
 
             <!-- Partner logos -->
@@ -144,8 +128,6 @@
 </template>
 
 <script setup lang="ts">
-const email = ref('')
-
 const socialLinks = [
   { label: 'Linkedin',    href: '#' },
   { label: 'Medium',      href: '#' },
@@ -160,9 +142,7 @@ const legalLinks = [
   { label: 'Terms',          href: '#' },
 ]
 
-function subscribe() {
-  if (!email.value) return
+function subscribe(_email: string) {
   // TODO: wire up to newsletter service
-  email.value = ''
 }
 </script>

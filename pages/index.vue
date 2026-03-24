@@ -5,10 +5,13 @@
     <section class="relative min-h-screen flex items-center justify-center">
 
       <div class="fixed inset-0 flex items-center justify-center pointer-events-none z-[-1]" aria-hidden="true">
-        <img
-          src="https://www.figma.com/api/mcp/asset/1f3a81cf-6050-41e9-b33e-0a30604ac7f3"
-          alt=""
-          class="w-[1264px] h-[949px] object-cover opacity-60 blur-[15px]"
+        <video
+          :src="bgVideo"
+          class="hero-blob opacity-60 blur-[15px] mix-blend-screen"
+          autoplay
+          loop
+          muted
+          playsinline
         />
       </div>
 
@@ -16,24 +19,20 @@
         <div class="grid-12">
           <div class="col-span-12 flex flex-col items-center gap-xlg">
             <div class="flex flex-col items-center gap-lg">
-              <div ref="heroTitleRef" class="reveal-title col-span-8 col-start-3 w-full max-w-[724px]">
+              <div ref="heroTitleRef" class="reveal-title w-full max-w-[724px]">
                 <h1 class="text-h1 font-primary text-text-highlighted text-center">
                   We build products and the companies behind them.
                 </h1>
               </div>
-              <div ref="heroSubtitleRef" class="reveal-fade max-w-[318px]">
+              <div ref="heroSubtitleRef" class="reveal-slide max-w-[318px]">
                 <p class="text-body-lg font-secondary text-text-body-primary text-center">
                   Two paths: Product or Venture. Same senior team, tailored to you.
                 </p>
               </div>
             </div>
-            <div ref="heroCtaRef" class="reveal-fade flex items-center gap-3">
-              <a href="#" class="border border-border-action text-text-action-inverted text-body-md h-12 px-6 flex items-center rounded-button whitespace-nowrap hover:bg-surface-action hover:text-text-action-primary transition-all duration-200">
-                Explore Product
-              </a>
-              <a href="#" class="border border-border-action text-text-action-inverted text-body-md h-12 px-6 flex items-center rounded-button whitespace-nowrap hover:bg-surface-action hover:text-text-action-primary transition-all duration-200">
-                Explore Venture
-              </a>
+            <div ref="heroCtaRef" class="reveal-slide flex items-center gap-3xsm">
+              <AppButton variant="outline" href="#">Explore Product</AppButton>
+              <AppButton variant="outline" href="#">Explore Venture</AppButton>
             </div>
           </div>
         </div>
@@ -42,47 +41,51 @@
     </section>
 
     <!-- ══════════════════════════════════════════════════════════════ INTRO -->
-    <section class="relative min-h-screen flex flex-col">
+    <section class="relative flex flex-col">
 
-      <div class="container pt-20">
-        <div ref="introMarqueeRef" class="reveal-fade flex items-stretch border-t border-border-secondary">
-          <div class="flex items-center pr-10 shrink-0 py-6">
+      <div class="container pt-2xlg">
+        <div ref="introMarqueeRef" class="reveal-slide flex items-stretch border-t border-border-secondary">
+          <div class="flex items-center pr-lg shrink-0 py-sm">
             <span class="text-body-xsm font-secondary text-text-label-primary uppercase tracking-widest whitespace-nowrap">
               trusted by
             </span>
           </div>
           <div class="border-l border-border-secondary overflow-hidden flex-1">
-            <div class="marquee-track py-6">
+            <div class="marquee-track py-sm">
               <template v-for="n in 2" :key="n">
-                <div
+                <img
                   v-for="logo in logos"
                   :key="`${n}-${logo.name}`"
-                  class="flex items-center justify-center px-10 shrink-0"
-                >
-                  <img :src="logo.src" :alt="logo.name" class="h-8 w-auto object-contain max-w-[140px]" />
-                </div>
+                  :src="logo.src"
+                  :alt="logo.name"
+                  class="h-[34px] w-auto shrink-0"
+                />
               </template>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="container flex-1 flex items-center py-20">
+      <div class="container flex-1 flex items-center pt-2xlg pb-0">
         <div class="grid-12 w-full">
-          <div class="col-span-12 flex flex-col items-center gap-8">
-            <div ref="introLabelRef" class="reveal-fade">
-              <span class="text-body-xsm font-secondary text-text-label-primary uppercase tracking-widest">
-                choose your path
-              </span>
+          <div ref="introContentRef" class="col-span-12 flex flex-col items-center gap-xlg">
+            <!-- label + heading grouped with gap-md -->
+            <div class="flex flex-col items-center gap-md w-full">
+              <div ref="introLabelRef">
+                <span class="text-body-xsm font-secondary text-text-label-primary uppercase tracking-widest">
+                  choose your path
+                </span>
+              </div>
+              <div ref="introHeadingRef" class="w-full">
+                <h2 class="text-h2 font-primary text-text-heading-primary text-center">
+                  Every project is custom. Whether it's design-only, team augmentation,
+                  or full product org. We've embedded for years, delivered end-to-end
+                  for crypto PSPs, staffed multinationals, and hired our own replacements
+                  without slowing delivery.
+                </h2>
+              </div>
             </div>
-            <div ref="introHeadingRef" class="reveal-title col-span-10 col-start-2 w-full">
-              <h2 class="text-h2 font-primary text-text-heading-primary text-center">
-                Every project is custom. Whether it's design-only, team augmentation,
-                or full product org. We've embedded for years, delivered end-to-end
-                for crypto PSPs, staffed multinationals, and hired our own replacements
-                without slowing delivery.
-              </h2>
-            </div>
+            <img ref="introIconRef" :src="iconCallSplit" alt="" class="w-10 h-10" aria-hidden="true" />
           </div>
         </div>
       </div>
@@ -90,198 +93,92 @@
     </section>
 
     <!-- ════════════════════════════════════════════════════════════════ PATH -->
-    <section class="relative py-20">
+    <section class="relative pt-xlg pb-2xlg">
+      <div class="container relative">
 
-      <Transition name="fade" mode="out-in">
-        <div v-if="!expandedCard" key="cards" class="container">
-          <div class="grid grid-cols-2 gap-4">
+        <!-- Each card lives in a slot that transitions its width on expand/collapse -->
+        <div class="path-cards">
+          <div
+            v-for="card in cards"
+            :key="card.id"
+            class="path-card-slot"
+            :class="{
+              'path-card-slot--expanded': expandedCard === card.id,
+              'path-card-slot--hidden':   expandedCard !== null && expandedCard !== card.id,
+            }"
+          >
+            <Transition name="path-body" mode="out-in">
 
-            <!-- Product Card -->
-            <div class="card" @mouseenter="hoveredCard = 'product'" @mouseleave="hoveredCard = null">
-              <div class="flex flex-col gap-8">
-                <div class="flex items-end justify-between">
-                  <div class="flex flex-col gap-2 max-w-[311px]">
-                    <img :src="product.icon" alt="" class="w-10 h-10 object-contain" />
-                    <h3 class="font-primary text-[2.25rem] leading-[2.5rem] tracking-[-0.72px] text-text-heading-primary">
-                      <span :class="hoveredCard === 'product' ? 'text-text-highlighted underline decoration-solid' : ''">Product Studio,</span><br />
-                      Whatever you need, we'll build
+              <!-- Collapsed -->
+              <div v-if="expandedCard !== card.id" key="collapsed">
+                <PathCard
+                  :data="card"
+                  :hovered="hoveredCard === card.id"
+                  @expand="expandedCard = card.id"
+                  @hoverenter="hoveredCard = card.id"
+                  @hoverleave="hoveredCard = null"
+                />
+              </div>
+
+              <!-- Expanded -->
+              <div
+                v-else
+                key="expanded"
+                class="expanded-card"
+                :class="{ 'flex-row-reverse': card.videoSide === 'left' }"
+              >
+                <div class="expanded-content">
+                  <div class="flex flex-col gap-2xsm">
+                    <img :src="card.icon" alt="" class="w-10 h-10 object-contain" />
+                    <h3 class="text-h3 font-primary text-text-heading-primary">
+                      {{ card.headingHighlight }},<br />{{ card.headingRest }}
                     </h3>
                   </div>
-                  <button class="video-thumb" @click="expandedCard = 'product'" aria-label="Play Product video">
-                    <img :src="product.thumb" alt="" class="absolute inset-0 w-full h-full object-cover" />
-                    <span class="relative z-10 flex items-center justify-center w-12 h-12 rounded-button bg-surface-action">
-                      <svg viewBox="0 0 24 24" class="w-6 h-6 fill-white"><path d="M8 5v14l11-7z"/></svg>
-                    </span>
-                  </button>
-                </div>
-                <div class="flex flex-col gap-6">
-                  <InfoSection label="About" :text="product.about" />
-                  <InfoSection label="What We Do" :text="product.whatWeDo" />
-                  <div class="flex flex-col gap-4">
-                    <hr class="border-t border-border-secondary" />
-                    <span class="text-body-xsm font-secondary text-text-body-primary uppercase">Outcomes</span>
-                    <div class="text-body-lg font-secondary text-text-body-primary">
-                      <p>{{ product.outcomesIntro }}</p>
-                      <ul class="list-disc pl-8 mt-4 space-y-1">
-                        <li v-for="item in product.outcomesList" :key="item">{{ item }}</li>
-                      </ul>
+                  <div class="flex flex-col gap-lg">
+                    <InfoSection label="About" :text="card.about" />
+                    <InfoSection label="What We Do" :text="card.whatWeDo" />
+                    <div class="flex flex-col gap-xsm">
+                      <hr class="border-t border-border-secondary" />
+                      <span class="text-body-xsm font-secondary text-text-body-primary uppercase">{{ card.outcomesLabel }}</span>
+                      <div class="text-body-lg font-secondary text-text-body-primary">
+                        <p>{{ card.outcomesIntro }}</p>
+                        <ul class="list-disc pl-8 mt-xsm space-y-2xsm">
+                          <li v-for="item in card.outcomesList" :key="item">{{ item }}</li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
+                  <AppButton variant="outline-icon" href="#" class="self-start">{{ card.buttonLabel }}</AppButton>
                 </div>
-              </div>
-              <div class="flex items-center gap-0.5">
-                <template v-if="hoveredCard === 'product'">
-                  <button class="btn-filled">Explore Product (Sandbox)</button>
-                  <button class="btn-icon-filled">
-                    <svg viewBox="0 0 24 24" class="w-5 h-5 fill-white"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
-                  </button>
-                </template>
-                <button v-else class="btn-outline">Explore Product (Sandbox)</button>
-              </div>
-            </div>
 
-            <!-- Venture Card -->
-            <div class="card" @mouseenter="hoveredCard = 'venture'" @mouseleave="hoveredCard = null">
-              <div class="flex flex-col gap-8">
-                <div class="flex items-end justify-between">
-                  <div class="flex flex-col justify-between h-[168px]">
-                    <img :src="venture.icon" alt="" class="w-10 h-10 object-contain" />
-                    <h3 class="font-primary text-[2.25rem] leading-[2.5rem] tracking-[-0.72px] text-text-heading-primary max-w-[234px]">
-                      <span :class="hoveredCard === 'venture' ? 'text-text-highlighted underline decoration-solid' : ''">Venture Studio,</span><br />
-                      Bring the idea
-                    </h3>
-                  </div>
-                  <button class="video-thumb" @click="expandedCard = 'venture'" aria-label="Play Venture video">
-                    <img :src="venture.thumb" alt="" class="absolute inset-0 w-full h-full object-cover" />
-                    <div class="absolute inset-0 bg-black/20" />
-                    <span class="relative z-10 flex items-center justify-center w-12 h-12 rounded-button bg-surface-action">
-                      <svg viewBox="0 0 24 24" class="w-6 h-6 fill-white"><path d="M8 5v14l11-7z"/></svg>
-                    </span>
+                <div class="video-panel" :class="card.videoSide === 'left' ? 'video-panel--left' : 'video-panel--right'">
+                  <img :src="card.video" :alt="`${card.headingHighlight} video`" class="absolute inset-0 w-full h-full object-cover" style="border-radius: var(--border-radius-card)" />
+                  <button @click="expandedCard = null" class="video-btn-stop" aria-label="Stop video">
+                    <svg viewBox="0 0 24 24" class="w-5 h-5"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="8" y="8" width="8" height="8" fill="currentColor"/></svg>
+                  </button>
+                  <button @click="expandedCard = null" class="video-btn-collapse" aria-label="Close video">
+                    <svg viewBox="0 0 24 24" class="w-5 h-5 fill-white"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
                   </button>
                 </div>
-                <div class="flex flex-col gap-6">
-                  <InfoSection label="About" :text="venture.about" />
-                  <InfoSection label="What We Do" :text="venture.whatWeDo" />
-                  <div class="flex flex-col gap-4">
-                    <hr class="border-t border-border-secondary" />
-                    <span class="text-body-xsm font-secondary text-text-body-primary uppercase">Process and Outcomes</span>
-                    <div class="text-body-lg font-secondary text-text-body-primary">
-                      <p>{{ venture.outcomesIntro }}</p>
-                      <ul class="list-disc pl-8 mt-4 space-y-1">
-                        <li v-for="item in venture.outcomesList" :key="item">{{ item }}</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
               </div>
-              <div class="flex items-center gap-0.5">
-                <template v-if="hoveredCard === 'venture'">
-                  <button class="btn-filled">Explore Venture</button>
-                  <button class="btn-icon-filled">
-                    <svg viewBox="0 0 24 24" class="w-5 h-5 fill-white"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
-                  </button>
-                </template>
-                <button v-else class="btn-outline">Explore Venture</button>
-              </div>
-            </div>
 
+            </Transition>
           </div>
         </div>
-      </Transition>
 
-      <!-- Product expanded -->
-      <Transition name="fade" mode="out-in">
-        <div v-if="expandedCard === 'product'" key="product-expanded" class="container">
-          <div class="expanded-card">
-            <div class="expanded-content">
-              <div class="flex flex-col gap-2">
-                <img :src="product.icon" alt="" class="w-10 h-10 object-contain" />
-                <h3 class="font-primary text-[2.25rem] leading-[2.5rem] tracking-[-0.72px] text-text-heading-primary max-w-[305px]">
-                  Product Studio, Whatever you need, we'll build
-                </h3>
-              </div>
-              <div class="flex flex-col gap-6">
-                <InfoSection label="About" :text="product.about" />
-                <InfoSection label="What We Do" :text="product.whatWeDo" />
-                <div class="flex flex-col gap-4">
-                  <hr class="border-t border-border-secondary" />
-                  <span class="text-body-xsm font-secondary text-text-body-primary uppercase">Outcomes</span>
-                  <div class="text-body-lg font-secondary text-text-body-primary">
-                    <p>{{ product.outcomesIntro }}</p>
-                    <ul class="list-disc pl-8 mt-4 space-y-1">
-                      <li v-for="item in product.outcomesList" :key="item">{{ item }}</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <button class="btn-outline self-start">Explore Product (Sandbox)</button>
-            </div>
-            <div class="video-panel">
-              <img :src="product.video" alt="Product video" class="absolute inset-0 w-full h-full object-cover rounded-[16px]" />
-              <button @click="expandedCard = null" class="video-btn-stop" aria-label="Stop video">
-                <svg viewBox="0 0 24 24" class="w-6 h-6"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="8" y="8" width="8" height="8" fill="currentColor"/></svg>
-              </button>
-              <button @click="expandedCard = null" class="video-btn-collapse" aria-label="Close video">
-                <svg viewBox="0 0 24 24" class="w-6 h-6 fill-white"><path d="M22 3.41L16.71 8.7 20 12h-8V4l3.29 3.29L20.59 2 22 3.41zM3.41 22l5.29-5.29L12 20v-8H4l3.29 3.29L2 20.59 3.41 22z"/></svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      </Transition>
-
-      <!-- Venture expanded -->
-      <Transition name="fade" mode="out-in">
-        <div v-if="expandedCard === 'venture'" key="venture-expanded" class="container">
-          <div class="expanded-card">
-            <div class="video-panel">
-              <img :src="venture.video" alt="Venture video" class="absolute inset-0 w-full h-full object-cover rounded-[16px]" />
-              <button @click="expandedCard = null" class="video-btn-stop" aria-label="Stop video">
-                <svg viewBox="0 0 24 24" class="w-6 h-6"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="8" y="8" width="8" height="8" fill="currentColor"/></svg>
-              </button>
-              <button @click="expandedCard = null" class="video-btn-collapse" aria-label="Close video">
-                <svg viewBox="0 0 24 24" class="w-6 h-6 fill-white"><path d="M22 3.41L16.71 8.7 20 12h-8V4l3.29 3.29L20.59 2 22 3.41zM3.41 22l5.29-5.29L12 20v-8H4l3.29 3.29L2 20.59 3.41 22z"/></svg>
-              </button>
-            </div>
-            <div class="expanded-content">
-              <div class="flex flex-col gap-2">
-                <img :src="venture.icon" alt="" class="w-10 h-10 object-contain" />
-                <h3 class="font-primary text-[2.25rem] leading-[2.5rem] tracking-[-0.72px] text-text-heading-primary max-w-[234px]">
-                  Venture Studio, Bring the idea
-                </h3>
-              </div>
-              <div class="flex flex-col gap-6">
-                <InfoSection label="About" :text="venture.about" />
-                <InfoSection label="What We Do" :text="venture.whatWeDo" />
-                <div class="flex flex-col gap-4">
-                  <hr class="border-t border-border-secondary" />
-                  <span class="text-body-xsm font-secondary text-text-body-primary uppercase">Process and Outcomes</span>
-                  <div class="text-body-lg font-secondary text-text-body-primary">
-                    <p>{{ venture.outcomesIntro }}</p>
-                    <ul class="list-disc pl-8 mt-4 space-y-1">
-                      <li v-for="item in venture.outcomesList" :key="item">{{ item }}</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <button class="btn-outline self-start">Explore Venture</button>
-            </div>
-          </div>
-        </div>
-      </Transition>
-
+      </div>
     </section>
 
     <!-- ══════════════════ WHITE BACKGROUND FROM HERE TO BOTTOM ══════════════ -->
     <div class="bg-brand-white">
 
     <!-- ══════════════════════════════════════════════════════════ PROJECTS -->
-    <!-- StickyCarousel: image cards with progress bar -->
     <StickyCarousel :items="projects" v-slot="{ item, fillPx }">
       <div class="container">
         <div class="flex flex-col gap-md">
 
           <NuxtLink :to="item.url" class="block group cursor-pointer">
-            <div class="relative bg-black rounded-[16px] overflow-hidden" style="height: 692px">
+            <div class="relative bg-black rounded-card overflow-hidden" style="height: var(--carousel-card-h)">
               <div
                 class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden"
                 style="width: 83.3%; height: 94.5%"
@@ -290,11 +187,12 @@
                   :src="item.image"
                   :alt="item.title"
                   class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                  loading="lazy"
                 />
               </div>
               <!-- Progress bar — dark track, white fill -->
-              <div class="absolute top-1/2 -translate-y-1/2 pointer-events-none z-10" style="right: 40px">
-                <div class="relative rounded-full" style="width: 4px; height: 80px; background: #525252">
+              <div class="absolute top-1/2 -translate-y-1/2 pointer-events-none z-10" style="right: var(--spacing-lg)">
+                <div class="progress-bar-track">
                   <div
                     class="absolute top-0 left-0 w-full rounded-full bg-white transition-all duration-150"
                     :style="{ height: fillPx + 'px' }"
@@ -320,28 +218,27 @@
     </StickyCarousel>
 
     <!-- ═══════════════════════════════════════════════════════════════ PROOF -->
-    <!-- Stacking rows only — no testimonial card -->
-    <section class="py-[60px] pb-24">
+    <section class="py-xlg pb-3xlg">
       <div class="container flex flex-col gap-lg">
 
-        <p class="text-body-xsm font-secondary text-text-label-primary uppercase text-center">
+        <p ref="proofLabelRef" class="reveal-fade text-body-xsm font-secondary text-text-label-primary uppercase text-center">
           proof and recognition
         </p>
 
-        <div>
+        <div class="flex flex-col gap-lg">
           <div
             v-for="(item, i) in proofItems"
             :key="item.id"
             :ref="(el) => setProofRowRef(el as HTMLElement | null, i)"
-            class="sticky border-t border-border-secondary flex gap-[131px] items-center"
+            class="sticky bg-brand-white border-t border-border-secondary flex gap-proof-gap items-center"
             :style="{ top: `${PROOF_STACK_BASE + i * PROOF_STACK_STEP}px`, zIndex: i + 1 }"
           >
-            <div class="py-lg shrink-0 flex items-center justify-center w-8 h-8">
+            <div class="shrink-0 flex items-center justify-center w-8 h-8">
               <img :src="item.icon" :alt="item.label" class="w-full h-full object-contain" />
             </div>
-            <div class="flex-1 border-l border-border-secondary px-lg py-lg">
+            <div class="flex-1 border-l border-border-secondary p-lg">
               <p
-                class="text-h2 font-primary tracking-[-0.96px] transition-colors duration-700"
+                class="text-h2 font-primary transition-colors duration-700"
                 :class="activeProofRows.has(i) ? 'text-text-highlighted' : 'text-text-heading-primary'"
               >
                 {{ item.text }}
@@ -354,21 +251,20 @@
     </section>
 
     <!-- ════════════════════════════════════════════════════════ FEEDBACK -->
-    <!-- StickyCarousel: blue testimonial cards with progress bar -->
     <div>
       <StickyCarousel :items="testimonials" v-slot="{ item, fillPx }">
         <div class="container">
-          <div class="relative bg-surface-action rounded-[16px] overflow-hidden" style="height: 692px">
+          <div class="relative bg-surface-action rounded-card overflow-hidden" style="height: var(--carousel-card-h)">
 
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-[80px] items-center w-[954px]">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-2xlg items-center w-[954px]">
               <p class="text-body-xsm font-secondary text-white uppercase tracking-widest">
                 what our clients say
               </p>
-              <div class="flex flex-col gap-[60px] items-center">
+              <div class="flex flex-col gap-xlg items-center">
                 <p class="text-h1 font-primary text-white text-center" style="max-width: 796px">
                   "{{ item.quote }}"
                 </p>
-                <div class="flex flex-col items-center gap-1">
+                <div class="flex flex-col items-center gap-2xsm">
                   <p class="text-body-md font-secondary text-white text-center font-medium">{{ item.name }}</p>
                   <p class="text-body-md font-secondary text-white text-center">
                     {{ item.role }}, <span class="underline">{{ item.company }}</span>
@@ -378,8 +274,8 @@
             </div>
 
             <!-- Progress bar — blue-500 track, white fill -->
-            <div class="absolute top-1/2 -translate-y-1/2 right-6 pointer-events-none z-10">
-              <div class="relative rounded-full" style="width: 4px; height: 80px; background: #2191ff">
+            <div class="absolute top-1/2 -translate-y-1/2 pointer-events-none z-10" style="right: var(--spacing-lg)">
+              <div class="progress-bar-track progress-bar-track--blue">
                 <div
                   class="absolute top-0 left-0 w-full rounded-full bg-white transition-all duration-150"
                   :style="{ height: fillPx + 'px' }"
@@ -393,26 +289,28 @@
     </div>
 
     <!-- ═══════════════════════════════════════════════════════════════ FAQS -->
-    <section class="py-[60px]">
+    <section class="pt-xlg" style="padding-bottom: 200px">
       <div class="container flex flex-col gap-lg">
 
-        <p class="text-body-xsm font-secondary text-text-label-primary uppercase text-center">
+        <p ref="faqLabelRef" class="reveal-fade text-body-xsm font-secondary text-text-label-primary uppercase">
           faqs
         </p>
 
-        <div>
+        <div class="flex flex-col gap-lg">
           <div
-            v-for="faq in faqs"
-            :key="faq.id"
-            class="border-t border-border-secondary flex items-start w-full"
+            v-for="(faq, i) in faqs"
+            :key="faq.number"
+            :ref="(el) => { faqRefs[i] = el as HTMLElement | null }"
+            class="reveal-slide border-t border-border-secondary flex items-start w-full"
+            style="gap: 315px"
           >
-            <div class="flex items-center py-[40px] shrink-0 w-[80px]">
+            <div class="flex items-center py-lg shrink-0">
               <span class="text-body-xsm font-secondary text-brand-black uppercase">{{ faq.number }}</span>
             </div>
-            <div class="flex-1 border-l border-border-secondary flex flex-col h-[200px] items-start justify-between pt-[40px] px-[40px]">
-              <h3 class="text-h3 font-primary text-text-heading-primary tracking-[-0.72px]">{{ faq.question }}</h3>
+            <div class="flex-1 border-l border-border-secondary flex flex-col h-[200px] items-start justify-between pt-lg px-lg">
+              <h3 class="text-h3 font-primary text-text-heading-primary">{{ faq.question }}</h3>
               <div class="text-body-md font-secondary max-w-[638px]">
-                <a v-if="faq.isLink" href="#" class="text-text-highlighted underline hover:opacity-80 transition-opacity">{{ faq.answer }}</a>
+                <a v-if="faq.isLink" :href="faq.link" class="text-text-highlighted underline hover:opacity-80 transition-opacity">{{ faq.answer }}</a>
                 <p v-else class="text-text-body-primary whitespace-pre-line">{{ faq.answer }}</p>
               </div>
             </div>
@@ -433,64 +331,51 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent } from 'vue'
-
 // ─── HERO ────────────────────────────────────────────────────────────────────
 const heroTitleRef    = ref<HTMLElement | null>(null)
 const heroSubtitleRef = ref<HTMLElement | null>(null)
 const heroCtaRef      = ref<HTMLElement | null>(null)
 
 // ─── INTRO ───────────────────────────────────────────────────────────────────
-const introMarqueeRef = ref<HTMLElement | null>(null)
-const introLabelRef   = ref<HTMLElement | null>(null)
-const introHeadingRef = ref<HTMLElement | null>(null)
+
+const introMarqueeRef  = ref<HTMLElement | null>(null)
+const introContentRef  = ref<HTMLElement | null>(null)
+const introLabelRef    = ref<HTMLElement | null>(null)
+const introHeadingRef  = ref<HTMLElement | null>(null)
+const introIconRef     = ref<HTMLElement | null>(null)
+
+import bgVideo        from '~/assets/3d-bg.mp4'
+import iconCallSplit   from '~/assets/icons/call_split.svg'
+import iconFunding     from '~/assets/icons/money_bag.svg'
+import iconCountries   from '~/assets/icons/globe_location_pin.svg'
+import iconProjects    from '~/assets/icons/rocket_launch.svg'
+import iconDeloitte    from '~/assets/icons/rewarded_ads.svg'
+
+import logoAtt      from '~/assets/svg/att.svg'
+import logoProtocol  from '~/assets/svg/Protocol.svg'
+import logoUphold    from '~/assets/svg/Uphold.svg'
+import logoRemote    from '~/assets/svg/Remote.svg'
+import logoBrazos    from '~/assets/svg/Brazos.svg'
+import logoOrki      from '~/assets/svg/Orki.svg'
+import logoQuill     from '~/assets/svg/Quill.svg'
 
 const logos = [
-  { name: 'AT&T',          src: 'https://www.figma.com/api/mcp/asset/8b23cabc-c6c4-45a4-9346-7c327f5fa974' },
-  { name: 'Protocol Labs', src: 'https://www.figma.com/api/mcp/asset/a8fd3ebe-1b98-461a-adc1-4a4a173603f4' },
-  { name: 'Uphold',        src: 'https://www.figma.com/api/mcp/asset/2a89920c-a364-4e00-8f62-8f1fe5af878b' },
-  { name: 'Remote',        src: 'https://www.figma.com/api/mcp/asset/a03e0c20-06c3-41b7-a53d-99361af79ec7' },
-  { name: 'Brazos',        src: 'https://www.figma.com/api/mcp/asset/8bfd8169-7240-45a2-81e4-70044d58f896' },
-  { name: 'Orki',          src: 'https://www.figma.com/api/mcp/asset/c43825ff-0bb0-405f-b994-cc52d7c9c70c' },
-  { name: 'Quill',         src: 'https://www.figma.com/api/mcp/asset/4bc5bb2c-c189-4022-a4ef-103b77d857c6' },
+  { name: 'AT&T',          src: logoAtt },
+  { name: 'Protocol Labs', src: logoProtocol },
+  { name: 'Uphold',        src: logoUphold },
+  { name: 'Remote',        src: logoRemote },
+  { name: 'Brazos',        src: logoBrazos },
+  { name: 'Orki',          src: logoOrki },
+  { name: 'Quill',         src: logoQuill },
 ]
 
 // ─── PATH ────────────────────────────────────────────────────────────────────
+const { cards } = usePathCards()
+
 const expandedCard = ref<null | 'product' | 'venture'>(null)
 const hoveredCard  = ref<null | 'product' | 'venture'>(null)
 
-const product = {
-  icon:         'https://www.figma.com/api/mcp/asset/da65c5d0-c2c7-4f5a-9c06-a79bd4246e19',
-  thumb:        'https://www.figma.com/api/mcp/asset/3b858ba2-8246-4716-8dd2-4b794145d00c',
-  video:        'https://www.figma.com/api/mcp/asset/187097ef-398c-420a-9878-088fa8456881',
-  about:        'A focused collaboration that can last for as long as the project needs us.',
-  whatWeDo:     'Validate the business, test assumptions, and ship either a PoC or a finished product.',
-  outcomesIntro:'You leave with a repo, demo, architecture notes, a prioritized backlog, and a decision memo.',
-  outcomesList: ['Decision-ready plan', 'Working PoC', 'Clear next steps'],
-}
-
-const venture = {
-  icon:         'https://www.figma.com/api/mcp/asset/c967b5fd-c435-44a1-9bb5-77823f7c20d6',
-  thumb:        'https://www.figma.com/api/mcp/asset/40f99106-7b13-46c9-a6fa-720674814546',
-  video:        'https://www.figma.com/api/mcp/asset/c1c1f244-7511-4902-a327-00b74b21307f',
-  about:        'Pitch us. We tailor capital, team, and equity to what moves fastest.',
-  whatWeDo:     'We shape team, capital, and scope to move fastest. Founders first; corporates/newcos welcome.',
-  outcomesIntro:'Pitch → Working session → Scope → Build & iterate → Raise/scale.',
-  outcomesList: ['Company-shaping support', 'Senior product & engineering', 'Access to our network'],
-}
-
-const InfoSection = defineComponent({
-  props: { label: String, text: String },
-  template: `
-    <div class="flex flex-col gap-4">
-      <hr class="border-t border-border-secondary" />
-      <span class="text-body-xsm font-secondary text-text-body-primary uppercase">{{ label }}</span>
-      <p class="text-body-lg font-secondary text-text-body-primary">{{ text }}</p>
-    </div>
-  `
-})
-
-// ─── PROJECTS (StickyCarousel data) ──────────────────────────────────────────
+// ─── PROJECTS ────────────────────────────────────────────────────────────────
 const projects = [
   {
     id: 'filecoin-station',
@@ -515,170 +400,249 @@ const projects = [
   },
 ]
 
-// ─── PROOF & RECOGNITION (stacking rows only) ────────────────────────────────
-const PROOF_STACK_BASE = 96  // top offset for first row (matches navbar safe zone)
-const PROOF_STACK_STEP = 64  // additional offset per subsequent row
+// ─── PROOF & RECOGNITION ─────────────────────────────────────────────────────
+const PROOF_STACK_BASE = 96
+const PROOF_STACK_STEP = 64
 
 const proofItems = [
-  {
-    id: 'funding',
-    label: 'Funding',
-    icon: 'https://www.figma.com/api/mcp/asset/293f929a-5ada-4258-b05b-f605cf7bb776',
-    text: 'Helped raised $100M',
-  },
-  {
-    id: 'countries',
-    label: 'Countries',
-    icon: 'https://www.figma.com/api/mcp/asset/0ca0d78f-833f-4338-aec1-65d9d76e2129',
-    text: '10 countries connected',
-  },
-  {
-    id: 'projects',
-    label: 'Projects',
-    icon: 'https://www.figma.com/api/mcp/asset/cb63919a-180b-40f3-adda-27c01fad5cd8',
-    text: '35 new projects (2020)',
-  },
-  {
-    id: 'deloitte',
-    label: 'Deloitte',
-    icon: 'https://www.figma.com/api/mcp/asset/8d006a4e-46bf-40a5-9c27-4ebf96d700aa',
-    text: 'Deloitte Technology Fast 500 EMEA (2019)',
-  },
+  { id: 'funding',  label: 'Funding',  icon: iconFunding,   text: 'Helped raised $100M' },
+  { id: 'countries',label: 'Countries',icon: iconCountries, text: '10 countries connected' },
+  { id: 'projects', label: 'Projects', icon: iconProjects,  text: '35 new projects (2020)' },
+  { id: 'deloitte', label: 'Deloitte', icon: iconDeloitte,  text: 'Deloitte Technology Fast 500 EMEA (2019)' },
 ]
 
-const proofRowRefs  = ref<(HTMLElement | null)[]>([])
+const proofLabelRef   = ref<HTMLElement | null>(null)
+const proofRowRefs    = ref<(HTMLElement | null)[]>([])
 const activeProofRows = ref<Set<number>>(new Set())
 
 function setProofRowRef(el: HTMLElement | null, i: number) {
   proofRowRefs.value[i] = el
 }
 
+// rAF-throttled — runs at most once per frame
+let proofRafId: number | null = null
 function onProofScroll() {
-  const next = new Set<number>()
-  proofRowRefs.value.forEach((el, i) => {
-    if (!el) return
-    const stickyTop = PROOF_STACK_BASE + i * PROOF_STACK_STEP
-    if (el.getBoundingClientRect().top <= stickyTop + 2) next.add(i)
+  if (proofRafId) return
+  proofRafId = requestAnimationFrame(() => {
+    proofRafId = null
+    const next = new Set<number>()
+    proofRowRefs.value.forEach((el, i) => {
+      if (!el) return
+      const stickyTop = PROOF_STACK_BASE + i * PROOF_STACK_STEP
+      if (el.getBoundingClientRect().top <= stickyTop + 2) next.add(i)
+    })
+    activeProofRows.value = next
   })
-  activeProofRows.value = next
 }
 
-// ─── FEEDBACK / TESTIMONIALS (StickyCarousel data) ───────────────────────────
+// ─── TESTIMONIALS ────────────────────────────────────────────────────────────
 const testimonials = [
-  {
-    quote:   'We … got the product built on time; we found a highly engaged team.',
-    name:    'Rui Silva',
-    role:    'EVP Product',
-    company: 'Uphold',
-  },
-  {
-    quote:   'Subvisual helped us move fast without sacrificing quality. They truly became part of our team.',
-    name:    'Alex Costa',
-    role:    'Co-founder',
-    company: 'Significa',
-  },
-  {
-    quote:   'The level of craft and attention to detail they bring is rare. We ship better products together.',
-    name:    'Maria Santos',
-    role:    'CTO',
-    company: 'Remote',
-  },
+  { quote: 'We … got the product built on time; we found a highly engaged team.', name: 'Rui Silva',   role: 'EVP Product', company: 'Uphold' },
+  { quote: 'Subvisual helped us move fast without sacrificing quality. They truly became part of our team.', name: 'Alex Costa',  role: 'Co-founder',  company: 'Significa' },
+  { quote: 'The level of craft and attention to detail they bring is rare. We ship better products together.', name: 'Maria Santos', role: 'CTO',         company: 'Remote' },
 ]
 
 // ─── FAQS ────────────────────────────────────────────────────────────────────
-const faqs = [
-  {
-    id: '01',
-    number: '01',
-    question: 'What is Subvisual?',
-    answer: 'A product and venture studio. We build software and help build the company around it. We specialise in Web3 and how it intersects with AI.',
-  },
-  {
-    id: '02',
-    number: '02',
-    question: 'How do the two paths differ?',
-    answer: 'Product = a hands-on sprint (Sandbox) to validate and build.\nVenture = a longer partnership where we co-build the company.',
-  },
-  {
-    id: '03',
-    number: '03',
-    question: 'Do you work with corporates/newcos?',
-    answer: 'Yes',
-  },
-  {
-    id: '04',
-    number: '04',
-    question: 'What do I get from the Sandbox?',
-    answer: 'Working PoC, decision-ready plan, and clear next steps.',
-  },
-  {
-    id: '05',
-    number: '05',
-    question: "I'm ready. How do we start?",
-    answer: 'Book Intro',
-    isLink: true,
-  },
-]
+const faqLabelRef = ref<HTMLElement | null>(null)
+const faqRefs     = ref<(HTMLElement | null)[]>([])
+
+import { asLink } from '@prismicio/client'
+
+const { client } = usePrismic()
+const { data: homeDoc } = await useAsyncData('home', () => client.getSingle('home'))
+
+const faqs = computed(() => {
+  const items = homeDoc.value?.data?.faqs
+  if (!items?.length) return []
+  return items.map((item: any, i: number) => ({
+    id:       String(i + 1),
+    number:   item.number   ?? String(i + 1).padStart(2, '0'),
+    question: item.question ?? '',
+    answer:   item.answer   ?? '',
+    isLink:   item.is_link  ?? false,
+    link:     asLink(item.link) ?? '#',
+  }))
+})
 
 // ─── LIFECYCLE ───────────────────────────────────────────────────────────────
+const { $lenis } = useNuxtApp()
+
+// ─── SCROLL-DRIVEN INTRO ANIMATION ───────────────────────────────────────────
+// Each element reveals as the section scrolls from the viewport bottom to ~40%
+// from the top. Progress is mapped per-element with a stagger offset.
+
+function mapRange(value: number, start: number, end: number) {
+  return Math.max(0, Math.min(1, (value - start) / (end - start)))
+}
+
+function onIntroScroll() {
+  const container = introContentRef.value
+  if (!container) return
+
+  const rect = container.getBoundingClientRect()
+  const vh   = window.innerHeight
+
+  // 0 = section top at viewport bottom, 1 = section top at 40% from top
+  const progress = mapRange(vh - rect.top, 0, vh * 0.6)
+
+  const reveal = (el: HTMLElement | null, pStart: number, pEnd: number, yMax = 48) => {
+    if (!el) return
+    const p = mapRange(progress, pStart, pEnd)
+    el.style.opacity   = String(p)
+    el.style.transform = `translateY(${yMax * (1 - p)}px)`
+  }
+
+  reveal(introLabelRef.value,   0.00, 0.35, 32)
+  reveal(introHeadingRef.value, 0.15, 0.70, 56)
+
+  // Icon has a base rotate(180deg) — combine with the y-offset
+  const iconEl = introIconRef.value
+  if (iconEl) {
+    const p = mapRange(progress, 0.55, 0.90)
+    iconEl.style.opacity   = String(p)
+    // After rotate(180deg), translateY is visually inverted — use negative to come from below
+    iconEl.style.transform = `rotate(180deg) translateY(${-20 * (1 - p)}px)`
+  }
+}
+
 onMounted(() => {
   const { observe } = useScrollReveal()
-  observe(heroTitleRef.value,    0)
-  observe(heroSubtitleRef.value, 200)
-  observe(heroCtaRef.value,      400)
-  observe(introMarqueeRef.value, 0)
-  observe(introLabelRef.value,   100)
-  observe(introHeadingRef.value, 200)
 
-  window.addEventListener('scroll', onProofScroll, { passive: true })
+  // Set initial hidden state for scroll-driven intro elements
+  ;[introLabelRef.value, introHeadingRef.value, introIconRef.value].forEach(el => {
+    if (el) { el.style.opacity = '0'; el.style.willChange = 'opacity, transform' }
+  })
+
+  // Hero (staggered entrance after nav)
+  observe(heroTitleRef.value,    400)
+  observe(heroSubtitleRef.value, 600)
+  observe(heroCtaRef.value,      800)
+
+  // Intro marquee (intersection-triggered)
+  observe(introMarqueeRef.value, 0)
+
+  // Proof
+  observe(proofLabelRef.value, 0)
+
+  // FAQs — staggered by 100ms each
+  observe(faqLabelRef.value, 0)
+  faqRefs.value.forEach((el, i) => observe(el, i * 100))
+
+  ;($lenis as any).on('scroll', onProofScroll)
+  ;($lenis as any).on('scroll', onIntroScroll)
 })
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', onProofScroll)
+  ;($lenis as any).off('scroll', onProofScroll)
+  ;($lenis as any).off('scroll', onIntroScroll)
 })
 </script>
 
 <style scoped>
-/* ── Path: card base ─────────────────────────────────────────────────────── */
-.card {
-  @apply backdrop-blur-[7px] bg-[rgba(255,255,255,0.5)] rounded-[16px] px-[60px] py-[40px] flex flex-col gap-8;
-}
-.video-thumb {
-  @apply relative w-[120px] h-[120px] flex-shrink-0 overflow-hidden rounded flex items-center justify-center;
-}
-.btn-outline {
-  @apply border border-border-action text-text-action-inverted text-body-md font-secondary h-12 px-6 flex items-center rounded-button whitespace-nowrap hover:bg-surface-action hover:text-text-action-primary transition-all duration-200;
-}
-.btn-filled {
-  @apply bg-surface-action text-text-action-primary text-body-md font-secondary h-12 px-6 flex items-center rounded-button whitespace-nowrap;
-}
-.btn-icon-filled {
-  @apply bg-surface-action w-12 h-12 flex items-center justify-center rounded-button flex-shrink-0;
-}
+/* ── Expanded card ───────────────────────────────────────────────────────── */
 .expanded-card {
-  @apply backdrop-blur-[7px] bg-[rgba(255,255,255,0.5)] rounded-[16px] px-[60px] py-[40px] flex items-start justify-between gap-8;
+  @apply backdrop-blur-[7px] bg-surface-secondary flex items-start justify-between;
+  padding: var(--spacing-lg) var(--spacing-xlg);
+  gap: var(--spacing-2xlg);
+  border-radius: var(--border-radius-card);
 }
 .expanded-content {
-  @apply flex flex-col gap-8 w-[576px] flex-shrink-0;
+  @apply flex flex-col flex-shrink-0;
+  gap: var(--spacing-2xlg);
+  width: var(--expanded-content-w);
 }
 .video-panel {
-  @apply relative w-[479px] h-[648px] flex-shrink-0 overflow-hidden rounded-[16px];
+  @apply relative flex-shrink-0 overflow-hidden;
+  border-radius: var(--border-radius-card);
+  width:  var(--video-panel-w);
+  height: var(--video-panel-h);
 }
 .video-btn-stop {
-  @apply absolute bottom-6 left-1/2 -translate-x-1/2 bg-white w-12 h-12 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity;
+  @apply absolute left-1/2 -translate-x-1/2 bg-white w-12 h-12 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity;
+  bottom: var(--spacing-lg);
   color: var(--color-text-heading-primary);
 }
 .video-btn-collapse {
-  @apply absolute top-6 right-6 bg-surface-action w-12 h-12 rounded-button flex items-center justify-center hover:opacity-80 transition-opacity;
+  @apply absolute bg-surface-action w-12 h-12 flex items-center justify-center hover:opacity-80 transition-opacity;
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
+  border-radius: var(--border-radius-button);
 }
 
-/* ── Transitions ──────────────────────────────────────────────────────────── */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
+/* Responsive expanded card */
+@media (max-width: 768px) {
+  .expanded-card {
+    @apply flex-col;
+  }
+  .expanded-content {
+    width: 100%;
+  }
+  .video-panel {
+    width: 100%;
+    height: 300px;
+  }
 }
-.fade-enter-from,
-.fade-leave-to {
+
+/* ── Progress bars ───────────────────────────────────────────────────────── */
+.progress-bar-track {
+  @apply relative rounded-full;
+  width: 4px;
+  height: 80px;
+  background: var(--color-black);
+  opacity: 0.3;
+}
+.progress-bar-track--blue {
+  background: var(--color-blue);
+  opacity: 1;
+}
+
+/* ── Path card slots (horizontal expand/collapse) ─────────────────────────── */
+.path-cards {
+  position: relative;
+  display: flex;
+  gap: var(--spacing-xsm);
+  align-items: start;
+}
+.path-card-slot {
+  overflow: hidden;
+  flex-shrink: 0;
+  width: calc(50% - var(--spacing-xsm) / 2);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+.path-card-slot--expanded { width: 100%; }
+.path-card-slot--hidden {
+  position: absolute;
+  width: 0;
   opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
 }
+
+/* ── Content swap (collapsed ↔ expanded) ──────────────────────────────────── */
+.path-body-enter-active { transition: opacity 0.3s ease 0.3s; }
+.path-body-leave-active { transition: opacity 0.15s ease; }
+.path-body-enter-from,
+.path-body-leave-to     { opacity: 0; }
+
+/* ── Video panel entrance ──────────────────────────────────────────────────── */
+.video-panel {
+  @apply relative flex-shrink-0 overflow-hidden;
+  border-radius: var(--border-radius-card);
+  width:  var(--video-panel-w);
+  height: var(--video-panel-h);
+  animation: videoRevealRight 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.45s both;
+}
+.video-panel--left {
+  animation-name: videoRevealLeft;
+}
+
+@keyframes videoRevealRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes videoRevealLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
 </style>

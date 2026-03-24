@@ -1,56 +1,48 @@
 <template>
   <nav
-    class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 px-6"
+    class="fixed left-1/2 -translate-x-1/2 z-50"
+    :class="{ 'nav-entered': navEntered }"
     :style="navStyle"
   >
     <div
       ref="pillRef"
-      class="bg-white/80 backdrop-blur-sm flex items-center pl-8 pr-2 py-2 rounded-[200px]"
-      :class="isScrolled ? 'gap-[30px]' : 'justify-between'"
+      class="bg-white/80 backdrop-blur-sm pl-8 pr-2 py-2 rounded-[200px] flex items-center justify-between w-full"
     >
 
-      <!-- Logo: full wordmark → symbol on scroll -->
-      <a href="/" class="shrink-0 flex items-center">
-        <Transition name="logo-fade" mode="out-in">
+      <!-- 1. Logo ───────────────────────────────────────────────────────────── -->
+      <a href="/" class="shrink-0 block" aria-label="Subvisual home">
+        <div class="relative overflow-hidden" :style="logoWrapStyle">
+          <!-- Full wordmark — visible by default and when docked to footer -->
           <img
-            v-if="!isScrolled"
-            key="wordmark"
             :src="imgMainLogo"
             alt="Subvisual"
+            class="absolute left-0 top-1/2 -translate-y-1/2 transition-opacity duration-300 ease-in-out"
+            :class="showCompactLogo ? 'opacity-0' : 'opacity-100'"
             width="141"
             height="24"
-            style="width: 141px; height: 24px;"
-            class="block"
           />
+          <!-- S symbol — visible only when scrolled and not docked -->
           <img
-            v-else
-            key="symbol"
             :src="imgSymbolBlue"
-            alt="Subvisual"
+            alt=""
+            class="absolute left-0 top-1/2 -translate-y-1/2 transition-opacity duration-300 ease-in-out"
+            :class="showCompactLogo ? 'opacity-100' : 'opacity-0'"
             width="29"
             height="28"
-            style="width: 29px; height: 28px;"
-            class="block"
           />
-        </Transition>
+        </div>
       </a>
 
-      <!-- Nav Links + CTA -->
-      <div class="flex items-center gap-11">
+      <!-- 2. Nav links + CTA ───────────────────────────────────────────────── -->
+      <div class="flex items-center gap-11 shrink-0">
         <a
           v-for="link in navLinks"
           :key="link.label"
           :href="link.href"
-          class="text-body-md font-secondary text-brand-black hover:text-text-highlighted transition-colors whitespace-nowrap"
-        >
-          {{ link.label }}
-        </a>
-        <a
-          href="#"
-          class="bg-surface-action text-text-action-primary text-body-md font-secondary h-12 px-6 flex items-center rounded-button whitespace-nowrap hover:opacity-90 transition-opacity"
-        >
-          Book Intro
-        </a>
+          class="text-body-md font-secondary text-brand-black whitespace-nowrap transition-all duration-150 hover:underline hover:font-medium"
+        >{{ link.label }}</a>
+
+        <AppButton href="#" class="shrink-0">Book Intro</AppButton>
       </div>
 
     </div>
@@ -70,62 +62,96 @@ const navLinks = [
   { label: 'Academy',                href: '#' },
 ]
 
-const SCROLL_THRESHOLD = 80
+const SCROLL_THRESHOLD  = 80
+const CONTAINER_MAX_PX  = 1260
+const CONTAINER_SIDE_PX = 24
+const DEFAULT_BOTTOM_PX = 32
 
-const isScrolled    = ref(false)
-const pillRef       = ref<HTMLElement | null>(null)
-const fullWidth     = ref(0)
-const compactWidth  = ref(0)
-const ready         = ref(false)
+const LOGO_FULL_W    = 141
+const LOGO_COMPACT_W = 29
+const LOGO_H         = 28
 
-// Computed inline style — width transitions once we have both measurements
+const navEntered   = ref(false)
+const isScrolled   = ref(false)
+const pillRef      = ref<HTMLElement | null>(null)
+const fullWidth    = ref(0)
+const compactWidth = ref(0)
+const ready        = ref(false)
+const bottomPx     = ref(DEFAULT_BOTTOM_PX)
+
+// Docked = footer has scrolled up enough to push the nav above its resting position
+const isDocked = computed(() => bottomPx.value > DEFAULT_BOTTOM_PX)
+
+// Compact logo only when scrolled AND not docked to footer
+const showCompactLogo = computed(() => isScrolled.value && !isDocked.value)
+
+const logoWrapStyle = computed(() => ({
+  width:      `${showCompactLogo.value ? LOGO_COMPACT_W : LOGO_FULL_W}px`,
+  height:     `${LOGO_H}px`,
+  transition: ready.value ? 'width 0.4s ease' : 'none',
+}))
+
 const navStyle = computed(() => {
-  if (!ready.value) return {}
-  return {
-    width:      isScrolled.value ? `${compactWidth.value}px` : `${fullWidth.value}px`,
-    transition: 'width 0.4s ease',
-  }
+  const bottom = `${bottomPx.value}px`
+  if (!ready.value) return { bottom }
+  // Expand to full width when docked to footer
+  const w = (isScrolled.value && !isDocked.value) ? compactWidth.value : fullWidth.value
+  return { width: `${w}px`, bottom }
 })
 
 const { $lenis } = useNuxtApp()
+let footerEl: HTMLElement | null = null
+
+function getFullWidth() {
+  return Math.min(CONTAINER_MAX_PX, window.innerWidth - CONTAINER_SIDE_PX * 2)
+}
 
 onMounted(async () => {
   const el = pillRef.value
   if (!el) return
 
-  // --- Measure FULL width (default state) ---
-  fullWidth.value = el.offsetWidth
+  footerEl = document.querySelector('footer')
 
-  // --- Measure COMPACT width (scrolled state) ---
-  // Temporarily switch to compact layout without transition
-  isScrolled.value = true
   await nextTick()
-  compactWidth.value = el.offsetWidth
+  requestAnimationFrame(() => { navEntered.value = true })
 
-  // Restore default state without triggering the width transition
-  isScrolled.value = false
-  await nextTick()
+  fullWidth.value  = getFullWidth()
 
-  // Now enable the transition
+  const naturalWidth = el.offsetWidth
+  compactWidth.value = naturalWidth - LOGO_FULL_W + LOGO_COMPACT_W + 30
+
   ready.value = true
 
-  $lenis.on('scroll', ({ scroll }: { scroll: number }) => {
-    isScrolled.value = scroll > SCROLL_THRESHOLD
-  })
+  window.addEventListener('resize', () => {
+    fullWidth.value = getFullWidth()
+  }, { passive: true })
+
+  $lenis.on('scroll', onScroll)
 })
 
+function onScroll({ scroll }: { scroll: number }) {
+  isScrolled.value = scroll > SCROLL_THRESHOLD
+
+  if (footerEl) {
+    const rect = footerEl.getBoundingClientRect()
+    // Track footer: clamp to default so nav never dips below resting position
+    bottomPx.value = Math.max(DEFAULT_BOTTOM_PX, window.innerHeight - rect.top + 2)
+  }
+}
+
 onUnmounted(() => {
-  $lenis.off('scroll')
+  $lenis.off('scroll', onScroll)
 })
 </script>
 
 <style scoped>
-.logo-fade-enter-active,
-.logo-fade-leave-active {
-  transition: opacity 0.25s ease;
-}
-.logo-fade-enter-from,
-.logo-fade-leave-to {
+nav {
   opacity: 0;
+  transform: translateX(-50%) translateY(-100vh);
+  transition: width 0.4s ease, opacity 1s ease, transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+nav.nav-entered {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 </style>

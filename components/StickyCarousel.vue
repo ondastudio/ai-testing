@@ -56,8 +56,10 @@ function onScroll() {
   scrollRatio.value = Math.max(0, Math.min(1, -top / scrollable))
 }
 
-onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }))
-onUnmounted(() => window.removeEventListener('scroll', onScroll))
+const { $lenis } = useNuxtApp()
+
+onMounted(() => ($lenis as any).on('scroll', onScroll))
+onUnmounted(() => ($lenis as any).off('scroll', onScroll))
 </script>
 
 <style scoped>
