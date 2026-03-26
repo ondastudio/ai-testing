@@ -58,8 +58,11 @@ export default {
         '3xlg': 'var(--spacing-3xlg)',
         'proof-gap': 'var(--proof-row-gap)',
       },
+      screens: {
+        'lg': '1440px',
+      },
       maxWidth: {
-        container: '1260px',
+        container: '1600px',
       },
       borderRadius: {
         button: 'var(--border-radius-button)',

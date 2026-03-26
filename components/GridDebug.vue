@@ -1,8 +1,8 @@
 <template>
   <div v-if="visible" class="grid-debug" aria-hidden="true">
     <div class="container h-full">
-      <div class="grid-12 h-full">
-        <div v-for="n in 12" :key="n" class="col-debug" />
+      <div class="grid-layout h-full">
+        <div v-for="n in cols" :key="n" class="col-debug" />
       </div>
     </div>
   </div>
@@ -10,6 +10,11 @@
 
 <script setup lang="ts">
 const visible = ref(false)
+
+const cols = computed(() => {
+  if (import.meta.client && window.innerWidth < 768) return 4
+  return 8
+})
 
 function onKeydown(e: KeyboardEvent) {
   if (e.ctrlKey && e.shiftKey && e.key === 'G') visible.value = !visible.value

@@ -19,5 +19,19 @@ export function useScrollReveal() {
     observer.observe(el)
   }
 
-  return { observe }
+  // Split an element's text into per-word spans and stagger their reveal
+  const observeWords = (el: HTMLElement | null, baseDelay = 0, stagger = 55) => {
+    if (!el) return
+
+    const words = (el.textContent || '').trim().split(/\s+/)
+    el.innerHTML = words
+      .map(w => `<span class="rv-word"><span class="rv-word-inner">${w}</span></span>`)
+      .join(' ')
+
+    el.querySelectorAll<HTMLElement>('.rv-word-inner').forEach((span, i) => {
+      observe(span, baseDelay + i * stagger)
+    })
+  }
+
+  return { observe, observeWords }
 }

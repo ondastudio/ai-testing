@@ -1,17 +1,17 @@
 <template>
   <nav
+    ref="navRef"
     class="fixed left-1/2 -translate-x-1/2 z-50"
-    :class="{ 'nav-entered': navEntered }"
-    :style="navStyle"
+    :class="{ 'nav-entered': navEntered, 'is-scrolled': showCompactLogo }"
+    :style="{ bottom: `${bottomPx}px` }"
   >
     <div
-      ref="pillRef"
       class="bg-white/80 backdrop-blur-sm pl-8 pr-2 py-2 rounded-[200px] flex items-center justify-between w-full"
     >
 
       <!-- 1. Logo ───────────────────────────────────────────────────────────── -->
       <a href="/" class="shrink-0 block" aria-label="Subvisual home">
-        <div class="relative overflow-hidden" :style="logoWrapStyle">
+        <div class="logo-wrap relative overflow-hidden" :style="logoWrapStyle">
           <!-- Full wordmark — visible by default and when docked to footer -->
           <img
             :src="imgMainLogo"
@@ -35,12 +35,13 @@
 
       <!-- 2. Nav links + CTA ───────────────────────────────────────────────── -->
       <div class="flex items-center gap-11 shrink-0">
-        <a
+        <NuxtLink
           v-for="link in navLinks"
           :key="link.label"
           :href="link.href"
-          class="text-body-md font-secondary text-brand-black whitespace-nowrap transition-all duration-150 hover:underline hover:font-medium"
-        >{{ link.label }}</a>
+          :data-label="link.label"
+          class="nav-link text-body-md font-secondary text-brand-black whitespace-nowrap"
+        >{{ link.label }}</NuxtLink>
 
         <AppButton href="#" class="shrink-0">Book Intro</AppButton>
       </div>
@@ -50,34 +51,29 @@
 </template>
 
 <script setup lang="ts">
-const imgMainLogo   = 'https://www.figma.com/api/mcp/asset/d0ca2c68-6b56-4f25-8542-a921027b34a2'
-const imgSymbolBlue = 'https://www.figma.com/api/mcp/asset/a175604e-dc80-444d-98f5-53e855f8610c'
+import imgMainLogo   from '~/assets/svg/subvisual-logo.svg'
+import imgSymbolBlue from '~/assets/svg/subvisual-symbol.svg'
 
 const navLinks = [
   { label: 'Product',                href: '#' },
   { label: 'Venture',                href: '#' },
   { label: 'Stables',                href: '#' },
   { label: 'Subvisual as a Service', href: '#' },
-  { label: 'Content',                href: '#' },
+  { label: 'Content',                href: '/blog' },
   { label: 'Academy',                href: '#' },
 ]
 
 const SCROLL_THRESHOLD  = 80
-const CONTAINER_MAX_PX  = 1260
-const CONTAINER_SIDE_PX = 24
 const DEFAULT_BOTTOM_PX = 32
 
 const LOGO_FULL_W    = 141
 const LOGO_COMPACT_W = 29
 const LOGO_H         = 28
 
-const navEntered   = ref(false)
-const isScrolled   = ref(false)
-const pillRef      = ref<HTMLElement | null>(null)
-const fullWidth    = ref(0)
-const compactWidth = ref(0)
-const ready        = ref(false)
-const bottomPx     = ref(DEFAULT_BOTTOM_PX)
+const navEntered = ref(false)
+const isScrolled = ref(false)
+const bottomPx   = ref(DEFAULT_BOTTOM_PX)
+const navRef     = ref<HTMLElement | null>(null)
 
 // Docked = footer has scrolled up enough to push the nav above its resting position
 const isDocked = computed(() => bottomPx.value > DEFAULT_BOTTOM_PX)
@@ -86,45 +82,29 @@ const isDocked = computed(() => bottomPx.value > DEFAULT_BOTTOM_PX)
 const showCompactLogo = computed(() => isScrolled.value && !isDocked.value)
 
 const logoWrapStyle = computed(() => ({
-  width:      `${showCompactLogo.value ? LOGO_COMPACT_W : LOGO_FULL_W}px`,
-  height:     `${LOGO_H}px`,
-  transition: ready.value ? 'width 0.4s ease' : 'none',
+  width:  `${showCompactLogo.value ? LOGO_COMPACT_W : LOGO_FULL_W}px`,
+  height: `${LOGO_H}px`,
 }))
-
-const navStyle = computed(() => {
-  const bottom = `${bottomPx.value}px`
-  if (!ready.value) return { bottom }
-  // Expand to full width when docked to footer
-  const w = (isScrolled.value && !isDocked.value) ? compactWidth.value : fullWidth.value
-  return { width: `${w}px`, bottom }
-})
 
 const { $lenis } = useNuxtApp()
 let footerEl: HTMLElement | null = null
 
-function getFullWidth() {
-  return Math.min(CONTAINER_MAX_PX, window.innerWidth - CONTAINER_SIDE_PX * 2)
-}
-
 onMounted(async () => {
-  const el = pillRef.value
-  if (!el) return
-
   footerEl = document.querySelector('footer')
 
   await nextTick()
+
+  // Measure compact width (content size) before entry animation starts,
+  // so CSS can transition between two pixel values instead of calc → auto.
+  const nav = navRef.value
+  if (nav) {
+    nav.style.width = 'max-content'
+    const compactW = nav.offsetWidth
+    nav.style.width = ''
+    nav.style.setProperty('--nav-compact-w', `${compactW}px`)
+  }
+
   requestAnimationFrame(() => { navEntered.value = true })
-
-  fullWidth.value  = getFullWidth()
-
-  const naturalWidth = el.offsetWidth
-  compactWidth.value = naturalWidth - LOGO_FULL_W + LOGO_COMPACT_W + 30
-
-  ready.value = true
-
-  window.addEventListener('resize', () => {
-    fullWidth.value = getFullWidth()
-  }, { passive: true })
 
   $lenis.on('scroll', onScroll)
 })
@@ -146,6 +126,7 @@ onUnmounted(() => {
 
 <style scoped>
 nav {
+  width: calc(min(var(--container-max), 100vw) - 2 * var(--container-px));
   opacity: 0;
   transform: translateX(-50%) translateY(-100vh);
   transition: width 0.4s ease, opacity 1s ease, transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -153,5 +134,60 @@ nav {
 nav.nav-entered {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+nav.is-scrolled {
+  width: var(--nav-compact-w);
+}
+/* logo wrapper transition */
+nav :deep(.logo-wrap) {
+  transition: width 0.4s ease;
+}
+
+/* Nav links */
+nav :deep(.nav-link) {
+  position: relative;
+  transition: color 0.2s ease, font-weight 0.15s ease;
+  /* Reserve space for bold weight so hover doesn't shift layout */
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+nav :deep(.nav-link)::before {
+  content: attr(data-label);
+  font-weight: 500;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Animated underline — grows left to right on hover */
+nav :deep(.nav-link)::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.25s ease;
+}
+
+nav :deep(.nav-link:hover) {
+  font-weight: 500;
+  color: var(--color-text-highlighted);
+}
+
+nav :deep(.nav-link:hover)::after {
+  width: 100%;
+}
+
+/* Active / current page — bold, blue, no underline */
+nav :deep(.nav-link.router-link-active),
+nav :deep(.nav-link.router-link-exact-active) {
+  font-weight: 500;
+  color: var(--color-text-highlighted);
 }
 </style>

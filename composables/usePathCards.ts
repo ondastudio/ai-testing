@@ -1,10 +1,11 @@
-import iconProduct from '~/assets/icons/design_services.svg'
-import iconVenture  from '~/assets/icons/view_in_ar.svg'
+import iconProduct from '~/assets/svg/product-studio.svg'
+import iconVenture  from '~/assets/svg/venture-studio.svg'
 
 export interface PathCardData {
   id: 'product' | 'venture'
   icon: string
   thumb: string
+  poster: string
   video: string
   headingHighlight: string  // part before the comma — highlighted on hover
   headingRest: string       // rest of the heading
@@ -23,7 +24,8 @@ export function usePathCards() {
       id:               'product',
       icon:             iconProduct,
       thumb:            'https://www.figma.com/api/mcp/asset/3b858ba2-8246-4716-8dd2-4b794145d00c',
-      video:            'https://www.figma.com/api/mcp/asset/187097ef-398c-420a-9878-088fa8456881',
+      poster:           'https://www.figma.com/api/mcp/asset/3b858ba2-8246-4716-8dd2-4b794145d00c',
+      video:            'https://site-assets.subvisual.com/product-studio.mp4',
       headingHighlight: 'Product Studio',
       headingRest:      "Whatever you need, we'll build",
       about:            'A focused collaboration that can last for as long as the project needs us.',
@@ -38,7 +40,8 @@ export function usePathCards() {
       id:               'venture',
       icon:             iconVenture,
       thumb:            'https://www.figma.com/api/mcp/asset/40f99106-7b13-46c9-a6fa-720674814546',
-      video:            'https://www.figma.com/api/mcp/asset/c1c1f244-7511-4902-a327-00b74b21307f',
+      poster:           'https://www.figma.com/api/mcp/asset/40f99106-7b13-46c9-a6fa-720674814546',
+      video:            'https://site-assets.subvisual.com/venture-studio.mp4',
       headingHighlight: 'Venture Studio',
       headingRest:      'Bring the idea',
       about:            'Pitch us. We tailor capital, team, and equity to what moves fastest.',

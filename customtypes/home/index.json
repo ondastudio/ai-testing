@@ -6,6 +6,53 @@
   "format": "custom",
   "json": {
     "Main": {
+      "projects": {
+        "type": "Group",
+        "config": {
+          "label": "Projects",
+          "fields": {
+            "title": {
+              "type": "Text",
+              "config": {
+                "label": "Title",
+                "placeholder": "FileCoin Station"
+              }
+            },
+            "description": {
+              "type": "Text",
+              "config": {
+                "label": "Description",
+                "placeholder": "Short project description"
+              }
+            },
+            "image": {
+              "type": "Image",
+              "config": {
+                "label": "Image",
+                "constraint": {},
+                "thumbnails": []
+              }
+            },
+            "url": {
+              "type": "Link",
+              "config": {
+                "label": "URL",
+                "select": null,
+                "allowTargetBlank": false
+              }
+            },
+            "com": {
+              "type": "Boolean",
+              "config": {
+                "label": "Coming Soon",
+                "placeholder_false": "false",
+                "placeholder_true": "true",
+                "default_value": false
+              }
+            }
+          }
+        }
+      },
       "faqs": {
         "type": "Group",
         "config": {
