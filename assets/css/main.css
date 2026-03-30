@@ -49,6 +49,9 @@
   --color-white:               #ffffff;
   --color-black:               #403f4c;
 
+  /* Muted / disabled state */
+  --color-text-muted:  #717087;
+
   /* Brand palette — raw colours */
   --color-blue:        #045cfc;
   --color-dark-blue:   #2421ab;
@@ -120,17 +123,33 @@
   --border-stroke-sm:     1px;
 
   /* Component sizing */
-  --hero-blob-max:       46.25rem;  /* 740px */
-  --video-thumb-size:    7.5rem;    /* 120px */
-  --video-panel-w:       29.9375rem;/* 479px */
-  --video-panel-h:       40.5rem;   /* 648px */
-  --expanded-content-w:  36rem;     /* 576px */
-  --proof-row-gap:       8.1875rem; /* 131px */
-  --carousel-card-h:     692px;
-  --footer-inner-gap:    6.25rem;   /* 100px */
-  --footer-links-gap:    7.25rem;   /* 116px */
-  --footer-newsletter-w: 27.375rem; /* 438px */
-  --footer-input-w:      19.4375rem;/* 311px */
+  --hero-blob-max:           46.25rem;  /* 740px */
+  --video-thumb-size:        7.5rem;    /* 120px */
+  --video-panel-w:           29.9375rem;/* 479px */
+  --video-panel-h:           40.5rem;   /* 648px */
+  --expanded-content-w:      36rem;     /* 576px */
+  --card-heading-tall-h:     10.5rem;   /* 168px */
+  --proof-row-gap:           8.1875rem; /* 131px */
+  --carousel-card-h:         692px;
+  --footer-inner-gap:        6.25rem;   /* 100px */
+  --footer-links-gap:        7.25rem;   /* 116px */
+  --footer-newsletter-w:     27.375rem; /* 438px */
+  --footer-input-w:          19.4375rem;/* 311px */
+  --footer-logo-gap:         1.625rem;  /* 26px */
+
+  /* Layout — section-specific */
+  --path-section-offset:     10rem;     /* 160px — sticky path section top + padding */
+  --testimonial-quote-max-w: 49.75rem;  /* 796px */
+  --faq-row-gap:             19.6875rem;/* 315px — gap between number and content */
+  --section-pb-faq:          12.5rem;   /* 200px */
+
+  /* Surfaces */
+  --color-surface-overlay-light: rgba(255, 255, 255, 0.2);
+
+  /* Animation */
+  --duration-reveal: 1.4s;
+  --duration-slide:  1.2s;
+  --easing-default:  ease;
 }
 
 /* ============================================================
@@ -261,18 +280,18 @@ html {
 .reveal-title {
   opacity: 0;
   transform: translateY(32px);
-  transition: opacity 1.4s ease, transform 1.4s ease;
+  transition: opacity var(--duration-reveal) var(--easing-default), transform var(--duration-reveal) var(--easing-default);
 }
 
 .reveal-fade {
   opacity: 0;
-  transition: opacity 1.4s ease;
+  transition: opacity var(--duration-reveal) var(--easing-default);
 }
 
 .reveal-slide {
   opacity: 0;
   transform: translateY(16px);
-  transition: opacity 1.2s ease, transform 1.2s ease;
+  transition: opacity var(--duration-slide) var(--easing-default), transform var(--duration-slide) var(--easing-default);
 }
 
 .reveal-title.is-visible,
@@ -293,7 +312,7 @@ html {
   display: inline-block;
   opacity: 0;
   transform: translateY(28px);
-  transition: opacity 1.2s ease, transform 1.2s ease;
+  transition: opacity var(--duration-slide) var(--easing-default), transform var(--duration-slide) var(--easing-default);
 }
 
 .rv-word-inner.is-visible {

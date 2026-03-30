@@ -69,8 +69,8 @@
     </section>
 
     <!-- ══════════════════════════════ PATH TEXT (sticky, releases at xlg gap) -->
-    <section class="pt-[10rem] pb-[30vh]">
-      <div class="sticky top-[10rem] z-10">
+    <section class="path-text-section">
+      <div class="sticky path-text-sticky z-10">
         <div class="container flex flex-col items-center gap-md">
           <div ref="pathLabelRef" class="reveal-fade">
             <span class="text-body-xsm font-secondary text-text-label-primary uppercase tracking-widest">
@@ -96,40 +96,41 @@
         <img ref="pathIconRef" :src="iconCallSplit" alt="" class="reveal-fade w-10 h-10 rotate-180" aria-hidden="true" />
 
         <div class="container path-cards-wrap">
-          <div class="path-cards" :class="{ 'path-cards--has-expanded': expandedCard !== null }">
+          <div class="path-cards">
             <div
               v-for="(card, i) in cards"
               :key="card.id"
               :ref="(el) => { pathCardRefs[i] = el as HTMLElement | null }"
               class="path-card-slot reveal-slide"
             >
-              <PathCard
-                :data="card"
-                :hovered="hoveredCard === card.id"
-                @expand="expandedCard = card.id"
-                @hoverenter="hoveredCard = card.id"
-                @hoverleave="hoveredCard = null"
-              />
+              <div
+                class="path-card-inner"
+                :class="{
+                  'path-card-inner--expanded':  expandedCard === card.id || collapsingCard === card.id,
+                  'path-card-inner--collapsing': collapsingCard === card.id,
+                  'path-card-inner--hidden':    expandedCard !== null && expandedCard !== card.id && collapsingCard !== card.id,
+                  'expand-from-right':          (expandedCard === card.id || collapsingCard === card.id) && i === 1,
+                }"
+              >
+                <PathCard
+                  :data="card"
+                  :hovered="hoveredCard === card.id"
+                  :expanded="expandedCard === card.id || collapsingCard === card.id"
+                  @expand="expandedCard = card.id"
+                  @collapse="handleCollapse"
+                  @hoverenter="hoveredCard = card.id"
+                  @hoverleave="hoveredCard = null"
+                />
+              </div>
             </div>
           </div>
-
-          <Transition name="expand-overlay">
-            <PathCard
-              v-if="expandedCard !== null"
-              :data="cards.find(c => c.id === expandedCard)!"
-              :expanded="true"
-              class="path-expanded-overlay"
-              :class="{ 'expand-from-right': cards.findIndex(c => c.id === expandedCard) === 1 }"
-              @collapse="expandedCard = null"
-            />
-          </Transition>
         </div>
 
       </div>
     </section>
 
     <!-- ══════════════════ WHITE BACKGROUND FROM HERE TO BOTTOM ══════════════ -->
-    <div class="bg-brand-white">
+    <div class="bg-white">
 
     <!-- ══════════════════════════════════════════════════════════ PROJECTS -->
     <CursorFollower :visible="comingSoonHovered" />
@@ -174,7 +175,7 @@
               >
                 {{ item.title }}
               </h3>
-              <span v-if="item.comingSoon" class="text-body-xsm font-secondary uppercase shrink-0 mt-1" style="color: #717087">
+              <span v-if="item.comingSoon" class="text-body-xsm font-secondary text-text-muted uppercase shrink-0 mt-1">
                 Coming Soon
               </span>
             </NuxtLink>
@@ -198,7 +199,7 @@
 
           <p
             ref="proofLabelRef"
-            class="reveal-fade relative text-body-xsm font-secondary text-text-label-primary uppercase text-center bg-brand-white py-sm"
+            class="reveal-fade relative text-body-xsm font-secondary text-text-label-primary uppercase text-center bg-white py-sm"
             :style="{ zIndex: proofItems.length + 1 }"
           >
             proof and recognition
@@ -209,7 +210,7 @@
             <div
               v-for="(item, i) in proofItems"
               :key="item.id"
-              class="proof-row absolute inset-x-0 bg-brand-white border-t border-border-secondary flex gap-proof-gap items-center"
+              class="proof-row absolute inset-x-0 bg-white border-t border-border-secondary flex gap-proof-gap items-center"
               :style="{ top: `${i * proofRowH}px`, zIndex: i + 1, transform: `translateY(${proofRowOffsets[i] ?? 0}px)` }"
             >
               <div class="shrink-0 flex items-center justify-center w-8 h-8">
@@ -240,7 +241,7 @@
                 what our clients say
               </p>
               <div class="flex flex-col gap-xlg items-center">
-                <p class="text-h1 font-primary text-white text-center" style="max-width: 796px">
+                <p class="text-h1 font-primary text-white text-center testimonial-quote">
                   "{{ item.quote }}"
                 </p>
                 <div class="flex flex-col items-center gap-2xsm">
@@ -268,10 +269,10 @@
     </div>
 
     <!-- ═══════════════════════════════════════════════════════════════ FAQS -->
-    <section class="pt-xlg" style="padding-bottom: 200px">
+    <section class="pt-xlg faqs-section">
       <div class="container flex flex-col gap-lg">
 
-        <p ref="faqLabelRef" class="reveal-fade text-body-xsm font-secondary text-text-label-primary uppercase">
+        <p ref="faqLabelRef" class="reveal-fade text-body-xsm font-secondary text-text-label-primary uppercase text-center">
           faqs
         </p>
 
@@ -280,11 +281,10 @@
             v-for="(faq, i) in faqs"
             :key="faq.number"
             :ref="(el) => { faqRefs[i] = el as HTMLElement | null }"
-            class="reveal-slide border-t border-border-secondary flex items-start w-full"
-            style="gap: 315px"
+            class="reveal-slide border-t border-border-secondary flex items-start w-full faq-row"
           >
             <div class="flex items-center py-lg shrink-0">
-              <span class="text-body-xsm font-secondary text-brand-black uppercase">{{ faq.number }}</span>
+              <span class="text-body-xsm font-secondary text-text-body-primary uppercase">{{ faq.number }}</span>
             </div>
             <div class="flex-1 border-l border-border-secondary flex flex-col h-[200px] items-start justify-between pt-lg px-lg">
               <h3 class="text-h3 font-primary text-text-heading-primary">{{ faq.question }}</h3>
@@ -354,8 +354,15 @@ const logos = [
 // ─── PATH ────────────────────────────────────────────────────────────────────
 const { cards } = usePathCards()
 
-const expandedCard = ref<null | 'product' | 'venture'>(null)
-const hoveredCard  = ref<null | 'product' | 'venture'>(null)
+const expandedCard  = ref<null | 'product' | 'venture'>(null)
+const collapsingCard = ref<null | 'product' | 'venture'>(null)
+const hoveredCard   = ref<null | 'product' | 'venture'>(null)
+
+function handleCollapse() {
+  collapsingCard.value = expandedCard.value
+  expandedCard.value = null
+  setTimeout(() => { collapsingCard.value = null }, 300)
+}
 
 // ─── PROJECTS ────────────────────────────────────────────────────────────────
 const comingSoonHovered = ref(false)
@@ -505,6 +512,28 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* ── Path text section ───────────────────────────────────────────────────── */
+.path-text-section {
+  padding-top: var(--path-section-offset);
+  padding-bottom: 30vh;
+}
+.path-text-sticky {
+  top: var(--path-section-offset);
+}
+
+/* ── FAQs ────────────────────────────────────────────────────────────────── */
+.faqs-section {
+  padding-bottom: var(--section-pb-faq);
+}
+.faq-row {
+  gap: var(--faq-row-gap);
+}
+
+/* ── Testimonials ────────────────────────────────────────────────────────── */
+.testimonial-quote {
+  max-width: var(--testimonial-quote-max-w);
+}
+
 /* ── Progress bars ───────────────────────────────────────────────────────── */
 .progress-bar-track {
   @apply relative rounded-full;
@@ -525,34 +554,44 @@ onUnmounted(() => {
   display: flex;
   align-items: stretch;
   gap: var(--grid-gutter);
+  position: relative;
 }
 .path-card-slot {
   flex-shrink: 0;
   width: calc(50% - var(--grid-gutter) / 2);
+}
+/* reveal-slide.is-visible sets transform:translateY(0) which would make the slot
+   a containing block for the absolutely-positioned inner wrapper — override it */
+.path-card-slot.is-visible {
+  transform: none;
+}
+.path-card-inner {
+  height: 100%;
   transition: opacity 0.2s ease;
 }
-.path-cards--has-expanded .path-card-slot {
-  opacity: 0;
-  pointer-events: none;
-}
-.path-expanded-overlay {
+.path-card-inner--expanded {
   position: absolute;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
   width: 100%;
   z-index: 10;
-}
-.expand-overlay-enter-active {
   animation: overlayRevealLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
 }
-.expand-overlay-enter-active.expand-from-right {
+.path-card-inner--expanded.expand-from-right {
   animation-name: overlayRevealRight;
 }
-.expand-overlay-leave-active {
-  transition: opacity 0.2s ease;
-}
-.expand-overlay-leave-to {
+.path-card-inner--hidden {
   opacity: 0;
+  pointer-events: none;
+}
+.path-card-inner--collapsing {
+  pointer-events: none;
+  animation: overlayCollapseLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.path-card-inner--collapsing.expand-from-right {
+  animation-name: overlayCollapseRight;
 }
 @keyframes overlayRevealLeft {
   from { clip-path: inset(0 50% 0 0); }
@@ -561,6 +600,14 @@ onUnmounted(() => {
 @keyframes overlayRevealRight {
   from { clip-path: inset(0 0 0 50%); }
   to   { clip-path: inset(0 0 0 0); }
+}
+@keyframes overlayCollapseLeft {
+  from { clip-path: inset(0 0% 0 0); }
+  to   { clip-path: inset(0 50% 0 0); }
+}
+@keyframes overlayCollapseRight {
+  from { clip-path: inset(0 0 0 0%); }
+  to   { clip-path: inset(0 0 0 50%); }
 }
 
 

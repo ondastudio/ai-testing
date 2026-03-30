@@ -11,6 +11,7 @@ export default {
     extend: {
       colors: {
         'text-highlighted':     'var(--color-text-highlighted)',
+        'text-muted':           'var(--color-text-muted)',
         'text-body-primary':    'var(--color-text-body-primary)',
         'text-heading-primary': 'var(--color-text-heading-primary)',
         'text-label-primary':   'var(--color-text-label-primary)',
@@ -22,8 +23,7 @@ export default {
         'surface-action':       'var(--color-surface-action)',
         'surface-secondary':    'var(--color-surface-secondary)',
         'surface-page':         'var(--color-surface-page)',
-        'brand-white':          'var(--color-white)',
-        'brand-black':          'var(--color-black)',
+        'white':                'var(--color-white)',
         'dark-blue':            'var(--color-dark-blue)',
         'purple-brand':         'var(--color-purple)',
         'pink-brand':           'var(--color-pink)',

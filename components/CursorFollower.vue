@@ -50,25 +50,25 @@ onUnmounted(() => {
   left: 0;
   pointer-events: none;
   z-index: 9999;
-  margin-top: 20px;
-  margin-right: -20px;
+  margin-top: var(--spacing-3xsm);
+  margin-right: calc(var(--spacing-3xsm) * -1);
   will-change: transform;
 }
 .cursor-follower__label {
   display: block;
-  padding: 16px 24px;
-  border-radius: 100px;
-  background: #717087;
-  color: #fff;
-  font-family: var(--font-secondary);
-  font-size: 16px;
-  font-weight: 400;
+  padding: var(--spacing-xsm) var(--spacing-sm);
+  border-radius: var(--border-radius-button);
+  background: var(--color-text-muted);
+  color: var(--color-white);
+  font-family: var(--font-family-secondary);
+  font-size: var(--font-size-body-md);
+  font-weight: var(--font-weight-regular);
   line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--letter-spacing-body-lg);
   white-space: nowrap;
   opacity: 0;
   transform: scale(0.85);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.2s var(--easing-default), transform 0.2s var(--easing-default);
 }
 .cursor-follower__label--visible {
   opacity: 1;

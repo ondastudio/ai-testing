@@ -1,122 +1,84 @@
 <template>
   <footer class="pb-3xlg pt-[2px]">
     <div class="container">
-      <div class="bg-surface-action px-8 py-xlg flex items-stretch overflow-hidden" style="border-radius: var(--border-radius-card); gap: var(--footer-inner-gap)">
+      <div class="bg-surface-action overflow-hidden rounded-card px-md py-xlg">
 
-        <!-- ── Left: tagline + copyright ──────────────────────────────────── -->
-        <div class="flex flex-col justify-between shrink-0">
-          <p class="text-h3 font-secondary text-brand-white">
-            We build products—<br />
-            and the companies<br />
-            behind them.
-          </p>
-          <p class="text-body-md font-secondary text-brand-white">© Subvisual 2025</p>
-        </div>
+        <!-- ── Mobile / default: stacked ───────────────── -->
+        <!-- ── Tablet (md): tagline top, then 2 cols ───── -->
+        <!-- ── Desktop (lg): single row ────────────────── -->
 
-        <!-- ── Content: links + newsletter/logos ──────────────────────────── -->
-        <div class="flex-1 flex items-start justify-end" style="gap: var(--footer-links-gap)">
+        <div class="footer-inner flex flex-col gap-lg lg:flex-row lg:items-stretch">
 
-          <!-- Links: Social + Legal -->
-          <div class="flex items-start gap-6 shrink-0">
-
-            <div class="flex flex-col gap-6">
-              <span class="text-body-md font-secondary text-brand-white font-medium">Social</span>
-              <a
-                v-for="link in socialLinks"
-                :key="link.label"
-                :href="link.href"
-                class="text-body-md font-secondary text-brand-white hover:opacity-70 transition-opacity whitespace-nowrap"
-              >{{ link.label }}</a>
-            </div>
-
-            <div class="flex flex-col gap-6">
-              <span class="text-body-md font-secondary text-brand-white font-medium">Legal</span>
-              <a
-                v-for="link in legalLinks"
-                :key="link.label"
-                :href="link.href"
-                class="text-body-md font-secondary text-brand-white hover:opacity-70 transition-opacity whitespace-nowrap"
-              >{{ link.label }}</a>
-            </div>
-
+          <!-- Left: tagline + copyright -->
+          <div class="flex flex-col gap-lg justify-between shrink-0 lg:gap-0">
+            <p class="footer-tagline font-secondary text-white">
+              <!-- Desktop: line-breaks; tablet+mobile: flows naturally -->
+              <span class="hidden lg:inline">We build products—<br />and the companies<br />behind them.</span>
+              <span class="lg:hidden">We build products—and the companies behind them.</span>
+            </p>
+            <!-- Copyright: bottom of left col on desktop, after content on mobile/tablet -->
+            <p class="text-body-md font-secondary text-white order-last lg:order-none">© Subvisual 2025</p>
           </div>
 
-          <!-- Newsletter + Logos -->
-          <div class="flex flex-col justify-between self-stretch shrink-0" style="width: var(--footer-newsletter-w)">
+          <!-- Right: links + newsletter/logos -->
+          <div class="flex-1 flex flex-col gap-lg md:flex-row md:items-stretch md:justify-between">
 
-            <!-- Newsletter input -->
-            <div class="flex flex-col gap-6">
-              <p class="text-body-md font-secondary text-brand-white">
-                Get occasional notes from the team and<br />
-                the Sandbox Playbook.
-              </p>
-              <AppInput type="email" @submit="subscribe" submit-label="Subscribe" />
-            </div>
+            <!-- Social + Legal columns -->
+            <div class="flex items-start gap-sm shrink-0">
 
-            <!-- Partner logos -->
-            <div class="flex flex-col gap-[26px]">
-
-              <!-- Row 1: Compete | Portugal 2030 | Cofinanciado EU -->
-              <div class="flex items-center gap-[26px]">
-
-                <!-- COMPETE -->
-                <img
-                  src="/logos/compete.svg"
-                  alt="Compete 2020"
-                  class="shrink-0"
-                  style="width: 57px; height: 30px; object-fit: contain;"
-                />
-
-                <!-- Portugal 2030 (composed: shield + bar + text) -->
-                <div class="relative shrink-0" style="width: 66px; height: 25px;">
-                  <img src="/logos/pt2030-shield.svg" alt="" class="absolute"
-                    style="left:0; top:0; width:18px; height:25px; object-fit:contain;" />
-                  <img src="/logos/pt2030-bar.svg" alt="" class="absolute"
-                    style="left:21px; top:0; width:33px; height:5px; object-fit:contain;" />
-                  <img src="/logos/pt2030-text.svg" alt="Portugal 2030" class="absolute"
-                    style="left:21px; top:8px; width:45px; height:16px; object-fit:contain;" />
-                </div>
-
-                <!-- Cofinanciado pela União Europeia (stars + text) -->
-                <div class="relative shrink-0" style="width: 114px; height: 25px;">
-                  <img src="/logos/eu-stars.svg" alt="" class="absolute"
-                    style="left:0; top:0; width:37px; height:25px; object-fit:contain;" />
-                  <img src="/logos/eu-cofinanciado.svg" alt="Cofinanciado pela União Europeia" class="absolute"
-                    style="left:42px; top:3px; width:72px; height:18px; object-fit:contain;" />
-                </div>
-
+              <div class="flex flex-col gap-sm">
+                <span class="text-body-md font-secondary text-white footer-label">Social</span>
+                <a
+                  v-for="link in socialLinks"
+                  :key="link.label"
+                  :href="link.href"
+                  class="text-body-md font-secondary text-white hover:opacity-70 transition-opacity whitespace-nowrap"
+                >{{ link.label }}</a>
               </div>
 
-              <!-- Row 2: Norte 2020 | Portugal 2020 | EU flag logo -->
-              <div class="flex items-center gap-[26px]">
-
-                <!-- NORTE 2020 -->
-                <img
-                  src="/logos/norte2020.svg"
-                  alt="Norte 2020"
-                  class="shrink-0"
-                  style="width: 122px; height: 19px; object-fit: contain;"
-                />
-
-                <!-- Portugal 2020 -->
-                <img
-                  src="/logos/portugal2020.svg"
-                  alt="Portugal 2020"
-                  class="shrink-0"
-                  style="width: 80px; height: 24px; object-fit: contain;"
-                />
-
-                <!-- EU flag logo -->
-                <img
-                  src="/logos/eu-flag-logo.svg"
-                  alt="União Europeia"
-                  class="shrink-0"
-                  style="width: 80px; height: 22px; object-fit: contain;"
-                />
-
+              <div class="flex flex-col gap-sm">
+                <span class="text-body-md font-secondary text-white footer-label">Legal</span>
+                <a
+                  v-for="link in legalLinks"
+                  :key="link.label"
+                  :href="link.href"
+                  class="text-body-md font-secondary text-white hover:opacity-70 transition-opacity whitespace-nowrap"
+                >{{ link.label }}</a>
               </div>
 
             </div>
+
+            <!-- Newsletter + logos -->
+            <div class="flex flex-col gap-sm shrink-0 justify-between">
+
+              <!-- Newsletter -->
+              <div class="flex flex-col gap-sm">
+                <p class="text-body-md font-secondary text-white" style="width: var(--footer-input-w)">
+                  Get occasional notes from the team and the Sandbox Playbook.
+                </p>
+                <AppInput type="email" @submit="subscribe" submit-label="Subscribe" />
+              </div>
+
+              <!-- Partner logos -->
+              <div class="partner-logos">
+                <div
+                  v-for="(row, r) in partnerLogoRows"
+                  :key="r"
+                  class="partner-logos__row"
+                >
+                  <img
+                    v-for="logo in row"
+                    :key="logo.alt"
+                    :src="logo.src"
+                    :alt="logo.alt"
+                    :width="logo.w"
+                    :height="logo.h"
+                    class="shrink-0 object-contain"
+                  />
+                </div>
+              </div><!-- /logos -->
+
+            </div><!-- /newsletter + logos -->
 
           </div>
 
@@ -128,6 +90,29 @@
 </template>
 
 <script setup lang="ts">
+import logo1 from '~/assets/svg/footer-1.svg'
+import logo2 from '~/assets/svg/footer-2.svg'
+import logo3 from '~/assets/svg/footer-3.svg'
+import logo4 from '~/assets/svg/footer-4.svg'
+import logo5 from '~/assets/svg/footer-5.svg'
+import logo6 from '~/assets/svg/footer-6.svg'
+import logo7 from '~/assets/svg/footer-7.svg'
+
+// Each row is an array of logo entries: { src, alt, w, h }
+const partnerLogoRows = [
+  [
+    { src: logo7, alt: 'Compete 2020',                    w: 58,  h: 31 },
+    { src: logo6, alt: 'Portugal 2030',                   w: 66,  h: 25 },
+    { src: logo5, alt: 'Cofinanciado pela União Europeia', w: 114, h: 25 },
+  ],
+  [
+    { src: logo4, alt: 'Norte 2020',    w: 122, h: 19 },
+    { src: logo3, alt: 'Portugal 2020', w: 80,  h: 25 },
+    { src: logo1, alt: 'União Europeia', w: 80,  h: 22 },
+    { src: logo2, alt: 'União Europeia', w: 79,  h: 25 },
+  ],
+]
+
 const socialLinks = [
   { label: 'Linkedin',    href: '#' },
   { label: 'Medium',      href: '#' },
@@ -146,3 +131,34 @@ function subscribe(_email: string) {
   // TODO: wire up to newsletter service
 }
 </script>
+
+<style scoped>
+/* h3 metrics without forcing the primary font-family */
+.footer-tagline {
+  font-size: var(--font-size-h3);
+  line-height: var(--line-height-h3);
+  letter-spacing: var(--letter-spacing-h3);
+}
+/* medium weight without being overridden by text-body-md */
+.footer-label {
+  font-weight: 500;
+}
+.footer-inner {
+  gap: var(--footer-inner-gap, 6.25rem);
+}
+@media (max-width: 1439px) {
+  .footer-inner {
+    gap: var(--spacing-lg);
+  }
+}
+.partner-logos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--footer-logo-gap);
+}
+.partner-logos__row {
+  display: flex;
+  align-items: center;
+  gap: var(--footer-logo-gap);
+}
+</style>

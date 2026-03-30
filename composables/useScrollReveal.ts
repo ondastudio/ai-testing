@@ -1,8 +1,10 @@
 export function useScrollReveal() {
-  const observe = (el: HTMLElement | null, delay = 0) => {
-    if (!el) return
+  const observe = (el: HTMLElement | { $el?: HTMLElement } | null, delay = 0) => {
+    // Template refs on Vue components give the instance, not the DOM element — unwrap if needed
+    const domEl: HTMLElement | null = el && '$el' in el ? (el.$el ?? null) : (el as HTMLElement | null)
+    if (!domEl) return
 
-    el.style.transitionDelay = `${delay}ms`
+    domEl.style.transitionDelay = `${delay}ms`
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -16,7 +18,7 @@ export function useScrollReveal() {
       { threshold: 0.05 }
     )
 
-    observer.observe(el)
+    observer.observe(domEl)
   }
 
   // Split an element's text into per-word spans and stagger their reveal
