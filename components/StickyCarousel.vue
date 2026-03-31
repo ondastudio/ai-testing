@@ -32,14 +32,14 @@
 <script setup lang="ts">
 // Navbar is fixed bottom-8 (32px) + pill height ~64px = 96px of bottom clearance
 const NAVBAR_SAFE_BOTTOM = 96
-const TRACK_H = 80 // progress bar track height in px
+const TRACK_W = 200 // progress bar track width in px (horizontal)
 
 const props = defineProps<{ items: any[] }>()
 
 const sectionRef   = ref<HTMLElement | null>(null)
 const scrollRatio  = ref(0)
 
-const fillPx = computed(() => Math.round(scrollRatio.value * TRACK_H))
+const fillPx = computed(() => Math.round(scrollRatio.value * TRACK_W))
 
 const activeIndex = computed(() =>
   Math.min(

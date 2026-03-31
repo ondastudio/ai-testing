@@ -7,25 +7,24 @@
         <!-- ── Tablet (md): tagline top, then 2 cols ───── -->
         <!-- ── Desktop (lg): single row ────────────────── -->
 
-        <div class="footer-inner flex flex-col gap-lg lg:flex-row lg:items-stretch">
+        <div class="footer-inner">
 
-          <!-- Left: tagline + copyright -->
-          <div class="flex flex-col gap-lg justify-between shrink-0 lg:gap-0">
-            <p class="footer-tagline font-secondary text-white">
-              <!-- Desktop: line-breaks; tablet+mobile: flows naturally -->
+          <!-- Left col (desktop): tagline + copyright stacked -->
+          <!-- On mobile: display:contents — children participate directly in footer-inner flex -->
+          <div class="footer-left">
+            <p class="footer-tagline font-secondary text-white footer-item--tagline">
               <span class="hidden lg:inline">We build products—<br />and the companies<br />behind them.</span>
               <span class="lg:hidden">We build products—and the companies behind them.</span>
             </p>
-            <!-- Copyright: bottom of left col on desktop, after content on mobile/tablet -->
-            <p class="text-body-md font-secondary text-white order-last lg:order-none">© Subvisual 2025</p>
+            <p class="text-body-md font-secondary text-white footer-item--copyright">© Subvisual 2025</p>
           </div>
 
-          <!-- Right: links + newsletter/logos -->
-          <div class="flex-1 flex flex-col gap-lg md:flex-row md:items-stretch md:justify-between">
+          <!-- Right col (desktop): social/legal + newsletter/logos in a row -->
+          <!-- On mobile: display:contents — children participate directly in footer-inner flex -->
+          <div class="footer-right">
 
-            <!-- Social + Legal columns -->
-            <div class="flex items-start gap-sm shrink-0">
-
+            <!-- Social + Legal -->
+            <div class="flex items-start gap-sm shrink-0 footer-item--social-legal">
               <div class="flex flex-col gap-sm">
                 <span class="text-body-md font-secondary text-white footer-label">Social</span>
                 <a
@@ -35,7 +34,6 @@
                   class="text-body-md font-secondary text-white hover:opacity-70 transition-opacity whitespace-nowrap"
                 >{{ link.label }}</a>
               </div>
-
               <div class="flex flex-col gap-sm">
                 <span class="text-body-md font-secondary text-white footer-label">Legal</span>
                 <a
@@ -45,14 +43,14 @@
                   class="text-body-md font-secondary text-white hover:opacity-70 transition-opacity whitespace-nowrap"
                 >{{ link.label }}</a>
               </div>
-
             </div>
 
-            <!-- Newsletter + logos -->
-            <div class="flex flex-col gap-sm shrink-0 justify-between">
+            <!-- Newsletter + logos wrapper -->
+            <!-- On mobile: display:contents — newsletter and logos split apart -->
+            <div class="footer-newsletter-logos">
 
               <!-- Newsletter -->
-              <div class="flex flex-col gap-sm">
+              <div class="flex flex-col gap-sm footer-item--newsletter">
                 <p class="text-body-md font-secondary text-white" style="width: var(--footer-input-w)">
                   Get occasional notes from the team and the Sandbox Playbook.
                 </p>
@@ -60,27 +58,29 @@
               </div>
 
               <!-- Partner logos -->
-              <div class="partner-logos">
-                <div
-                  v-for="(row, r) in partnerLogoRows"
-                  :key="r"
-                  class="partner-logos__row"
-                >
-                  <img
-                    v-for="logo in row"
-                    :key="logo.alt"
-                    :src="logo.src"
-                    :alt="logo.alt"
-                    :width="logo.w"
-                    :height="logo.h"
-                    class="shrink-0 object-contain"
-                  />
+              <div class="footer-item--logos">
+                <div class="partner-logos">
+                  <div
+                    v-for="(row, r) in partnerLogoRows"
+                    :key="r"
+                    class="partner-logos__row"
+                  >
+                    <img
+                      v-for="logo in row"
+                      :key="logo.alt"
+                      :src="logo.src"
+                      :alt="logo.alt"
+                      :width="logo.w"
+                      :height="logo.h"
+                      class="shrink-0 object-contain"
+                    />
+                  </div>
                 </div>
-              </div><!-- /logos -->
+              </div>
 
-            </div><!-- /newsletter + logos -->
+            </div><!-- /newsletter-logos -->
 
-          </div>
+          </div><!-- /footer-right -->
 
         </div>
 
@@ -143,14 +143,77 @@ function subscribe(_email: string) {
 .footer-label {
   font-weight: 500;
 }
+
+/* ── Mobile layout: flat column, controlled by order ──────────────────────── */
 .footer-inner {
-  gap: var(--footer-inner-gap, 6.25rem);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
 }
-@media (max-width: 1439px) {
+
+/* Wrappers become transparent on mobile — children flow into footer-inner */
+.footer-left,
+.footer-right,
+.footer-newsletter-logos {
+  display: contents;
+}
+
+/* Mobile order: tagline → newsletter → social/legal → logos → copyright */
+.footer-item--tagline      { order: 1; }
+.footer-item--newsletter   { order: 2; }
+.footer-item--social-legal { order: 3; }
+.footer-item--logos        { order: 4; }
+.footer-item--copyright    { order: 5; }
+
+/* ── Desktop layout: left col + right col ─────────────────────────────────── */
+@media (min-width: 1024px) {
+  .footer-inner {
+    flex-direction: row;
+    align-items: stretch;
+    gap: var(--footer-inner-gap, 6.25rem);
+  }
+
+  /* Restore wrappers as real layout boxes */
+  .footer-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-shrink: 0;
+    order: 0;
+  }
+  .footer-right {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-between;
+    flex: 1;
+    order: 0;
+  }
+  .footer-newsletter-logos {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-shrink: 0;
+    order: 0;
+  }
+
+  /* Reset mobile orders */
+  .footer-item--tagline,
+  .footer-item--newsletter,
+  .footer-item--social-legal,
+  .footer-item--logos,
+  .footer-item--copyright {
+    order: 0;
+  }
+}
+
+/* Tablet: slightly smaller gap */
+@media (min-width: 768px) and (max-width: 1023px) {
   .footer-inner {
     gap: var(--spacing-lg);
   }
 }
+
 .partner-logos {
   display: flex;
   flex-direction: column;

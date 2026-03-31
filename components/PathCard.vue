@@ -80,7 +80,7 @@
         :ref="video.videoRef"
         :src="data.video"
         :poster="data.poster"
-        class="absolute inset-0 w-full h-full object-cover"
+        class="absolute top-0 right-0 h-full w-auto"
         :style="{ borderRadius: 'var(--border-radius-card)' }"
         autoplay
         loop
@@ -279,9 +279,31 @@ const { videoProgress, isPlaying, onTimeUpdate, togglePlay } = video
 }
 
 /* ── Responsive ─────────────────────────────────────────────────────────── */
-@media (max-width: 768px) {
+
+/* Tablet (768px – 1439px): side-by-side but narrower, flex-1 each */
+@media (min-width: 768px) and (max-width: 1439px) {
+  .path-card--expanded {
+    padding: var(--spacing-lg) var(--spacing-sm);
+    gap: var(--spacing-sm);
+  }
+  .path-card--expanded .card-main {
+    width: auto;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .video-panel {
+    width: auto;
+    flex: 1 1 0;
+    min-width: 0;
+    height: auto;
+    aspect-ratio: 334 / 612;
+  }
+}
+
+/* Mobile (<768px): stacked vertically, video above content */
+@media (max-width: 767px) {
   .path-card--expanded { flex-direction: column; }
   .path-card--expanded .card-main { width: 100%; }
-  .video-panel { width: 100%; height: 300px; }
+  .path-card--expanded .video-panel { order: -1; width: 100%; height: 466px; }
 }
 </style>

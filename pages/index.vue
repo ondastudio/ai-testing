@@ -19,7 +19,7 @@
         <div class="grid-layout">
           <div class="col-span-4 md:col-span-8 flex flex-col items-center gap-xlg">
             <div class="flex flex-col items-center gap-lg">
-              <div ref="heroTitleRef" class="reveal-title w-full max-w-[724px]">
+              <div ref="heroTitleRef" class="reveal-title w-full max-w-[540px] lg:max-w-[724px]">
                 <h1 class="text-h1 font-primary text-text-highlighted text-center">
                   We build products and the companies behind them.
                 </h1>
@@ -44,13 +44,15 @@
     <section class="relative flex flex-col">
 
       <div class="container pt-2xlg">
-        <div ref="introMarqueeRef" class="reveal-slide flex items-stretch border-t border-border-secondary">
-          <div class="flex items-center pr-lg shrink-0 py-sm">
+        <div ref="introMarqueeRef" class="reveal-slide flex flex-col lg:flex-row lg:items-stretch lg:border-t border-border-secondary">
+          <!-- Label: centered above on tablet/mobile, inline-left on desktop -->
+          <div class="flex items-center justify-center lg:justify-start lg:pr-lg shrink-0 py-sm">
             <span class="text-body-xsm font-secondary text-text-label-primary uppercase tracking-widest whitespace-nowrap">
               trusted by
             </span>
           </div>
-          <div class="border-l border-border-secondary overflow-hidden flex-1">
+          <!-- Logos: full-width border-t on tablet/mobile, border-l on desktop -->
+          <div class="border-t lg:border-t-0 lg:border-l border-border-secondary overflow-hidden flex-1">
             <div class="marquee-track py-sm">
               <template v-for="n in 2" :key="n">
                 <img
@@ -68,32 +70,31 @@
 
     </section>
 
-    <!-- ══════════════════════════════ PATH TEXT (sticky, releases at xlg gap) -->
-    <section class="path-text-section">
-      <div class="sticky path-text-sticky z-10">
-        <div class="container flex flex-col items-center gap-md">
-          <div ref="pathLabelRef" class="reveal-fade">
-            <span class="text-body-xsm font-secondary text-text-label-primary uppercase tracking-widest">
-              choose your path
-            </span>
-          </div>
-          <div ref="pathHeadingRef" class="w-full">
-            <h2 class="text-h2 font-primary text-text-heading-primary text-center max-w-[1200px] mx-auto">
-              Every project is custom. Whether it's design-only, team augmentation,
-              or full product org. We've embedded for years, delivered end-to-end
-              for crypto PSPs, staffed multinationals, and hired our own replacements
-              without slowing delivery.
-            </h2>
+    <!-- ══════════════════════════════════════════════════════════ PATH -->
+    <section class="path-section">
+
+      <div class="path-text-wrapper">
+        <div class="md:sticky path-text-sticky z-10">
+          <div class="container flex flex-col items-center gap-md">
+            <div ref="pathLabelRef" class="reveal-fade">
+              <span class="text-body-xsm font-secondary text-text-label-primary uppercase tracking-widest">
+                choose your path
+              </span>
+            </div>
+            <div ref="pathHeadingRef" class="w-full">
+              <h2 class="text-h2 font-primary text-text-heading-primary text-center max-w-[1200px] mx-auto">
+                Every project is custom. Whether it's design-only, team augmentation,
+                or full product org. We've embedded for years, delivered end-to-end
+                for crypto PSPs, staffed multinationals, and hired our own replacements
+                without slowing delivery.
+              </h2>
+            </div>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- ═══════════════════════════════════════════ PATH CARDS (xlg below text) -->
-    <section class="pb-2xlg">
-      <div class="flex flex-col items-center gap-xlg pt-xlg">
-
-        <img ref="pathIconRef" :src="iconCallSplit" alt="" class="reveal-fade w-10 h-10 rotate-180" aria-hidden="true" />
+      <div class="path-cards-below">
+        <img ref="pathIconRef" :src="iconCallSplit" alt="" class="reveal-fade w-10 h-10 rotate-180 mx-auto mb-xlg" aria-hidden="true" />
 
         <div class="container path-cards-wrap">
           <div class="path-cards">
@@ -125,8 +126,8 @@
             </div>
           </div>
         </div>
-
       </div>
+
     </section>
 
     <!-- ══════════════════ WHITE BACKGROUND FROM HERE TO BOTTOM ══════════════ -->
@@ -134,7 +135,7 @@
 
     <!-- ══════════════════════════════════════════════════════════ PROJECTS -->
     <CursorFollower :visible="comingSoonHovered" />
-    <StickyCarousel :items="projects" v-slot="{ item, fillPx }">
+    <StickyCarousel :items="projects" v-slot="{ item, scrollRatio }">
       <div class="flex flex-col gap-md">
 
         <div class="container">
@@ -153,12 +154,9 @@
                 loading="lazy"
               />
               <!-- Progress bar — dark track, white fill -->
-              <div class="absolute top-1/2 -translate-y-1/2 pointer-events-none z-10" style="right: var(--spacing-lg)">
+              <div class="progress-bar-wrapper" :style="{ '--ratio': scrollRatio }">
                 <div class="progress-bar-track">
-                  <div
-                    class="absolute top-0 left-0 w-full rounded-full bg-white transition-all duration-150"
-                    :style="{ height: fillPx + 'px' }"
-                  />
+                  <div class="progress-bar-fill bg-white" />
                 </div>
               </div>
             </div>
@@ -167,7 +165,7 @@
 
         <!-- Title + description: inside container -->
         <div class="container">
-          <div class="flex items-end justify-between">
+          <div class="flex flex-col gap-sm lg:flex-row lg:items-end lg:justify-between">
             <NuxtLink :to="item.comingSoon ? undefined : item.url" class="flex items-start gap-[10px]">
               <h3
                 class="text-h3 font-primary text-text-heading-primary transition-colors duration-200"
@@ -192,10 +190,10 @@
     <section
       ref="proofSectionRef"
       class="relative py-xlg pb-3xlg"
-      :style="{ minHeight: `calc(100vh + ${PROOF_SCROLL_PER_ROW * (proofItems.length - 1)}px)` }"
+      :style="proofAnimated ? { minHeight: `calc(100vh + ${PROOF_SCROLL_PER_ROW * (proofItems.length - 1)}px)` } : {}"
     >
         <!-- sticky div is a direct child of section so the section is the containing block -->
-        <div class="sticky container" :style="{ top: `${proofGroupTop}px` }">
+        <div class="container" :class="proofAnimated ? 'sticky' : ''" :style="proofAnimated ? { top: `${proofGroupTop}px` } : {}">
 
           <p
             ref="proofLabelRef"
@@ -206,7 +204,7 @@
           </p>
 
           <!-- rows container: height is animated as rows stack -->
-          <div class="relative" :style="{ height: `${proofContainerH}px` }">
+          <div class="relative" :style="proofAnimated ? { height: `${proofContainerH}px` } : {}">
             <div
               v-for="(item, i) in proofItems"
               :key="item.id"
@@ -232,11 +230,11 @@
 
     <!-- ════════════════════════════════════════════════════════ FEEDBACK -->
     <div>
-      <StickyCarousel :items="testimonials" v-slot="{ item, fillPx }">
+      <StickyCarousel :items="testimonials" v-slot="{ item, scrollRatio }">
         <div class="container">
           <div class="relative bg-surface-action rounded-card overflow-hidden" style="height: var(--carousel-card-h)">
 
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-2xlg items-center w-[954px]">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-2xlg items-center w-full px-lg lg:px-0 lg:max-w-[954px]">
               <p class="text-body-xsm font-secondary text-white uppercase tracking-widest">
                 what our clients say
               </p>
@@ -253,13 +251,10 @@
               </div>
             </div>
 
-            <!-- Progress bar — blue-500 track, white fill -->
-            <div class="absolute top-1/2 -translate-y-1/2 pointer-events-none z-10" style="right: var(--spacing-lg)">
+            <!-- Progress bar — blue track, white fill -->
+            <div class="progress-bar-wrapper" :style="{ '--ratio': scrollRatio }">
               <div class="progress-bar-track progress-bar-track--blue">
-                <div
-                  class="absolute top-0 left-0 w-full rounded-full bg-white transition-all duration-150"
-                  :style="{ height: fillPx + 'px' }"
-                />
+                <div class="progress-bar-fill bg-white" />
               </div>
             </div>
 
@@ -391,6 +386,7 @@ const proofItems = [
   { id: 'deloitte', label: 'Deloitte', icon: iconDeloitte,  text: 'Deloitte Technology Fast 500 EMEA (2019)' },
 ]
 
+const proofAnimated    = ref(true)
 const proofSectionRef  = ref<HTMLElement | null>(null)
 const proofLabelRef    = ref<HTMLElement | null>(null)
 const activeProofRows  = ref<Set<number>>(new Set())
@@ -487,15 +483,18 @@ onMounted(() => {
   observe(pathIconRef.value,  0)
   pathCardRefs.value.forEach((el, i) => observe(el, i * 150))
 
-  // Proof — measure elements and center the entire group on the viewport
-  const labelH   = proofLabelRef.value?.offsetHeight ?? 48
-  const firstRow = proofSectionRef.value?.querySelector('.proof-row') as HTMLElement | null
-  const rowH     = firstRow?.offsetHeight ?? 80
-  proofRowH.value       = rowH
-  proofContainerH.value = proofItems.length * rowH          // initial full height
-  proofGroupTop.value   = Math.round(window.innerHeight / 2 - (labelH + proofContainerH.value) / 2)
-  proofRowOffsets.value = proofItems.map(() => 0)           // all rows visible, not stacked yet
-  onProofScroll()
+  // Proof — sticky stacking animation only on tablet+ (≥768px)
+  proofAnimated.value = window.innerWidth >= 768
+  if (proofAnimated.value) {
+    const labelH   = proofLabelRef.value?.offsetHeight ?? 48
+    const firstRow = proofSectionRef.value?.querySelector('.proof-row') as HTMLElement | null
+    const rowH     = firstRow?.offsetHeight ?? 80
+    proofRowH.value       = rowH
+    proofContainerH.value = proofItems.length * rowH
+    proofGroupTop.value   = Math.round(window.innerHeight / 2 - (labelH + proofContainerH.value) / 2)
+    proofRowOffsets.value = proofItems.map(() => 0)
+    onProofScroll()
+  }
 
   observe(proofLabelRef.value, 0)
 
@@ -512,13 +511,21 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* ── Path text section ───────────────────────────────────────────────────── */
-.path-text-section {
-  padding-top: var(--path-section-offset);
-  padding-bottom: 30vh;
+/* ── Path section ────────────────────────────────────────────────────────── */
+.path-section {
+  margin-top: var(--spacing-3xlg);
+  padding-top: 10rem;
+}
+.path-text-wrapper {
+  min-height: 80vh;
 }
 .path-text-sticky {
-  top: var(--path-section-offset);
+  top: 50vh;
+  transform: translateY(-50%);
+}
+.path-cards-below {
+  padding-top: var(--spacing-xlg);
+  padding-bottom: var(--spacing-2xlg);
 }
 
 /* ── FAQs ────────────────────────────────────────────────────────────────── */
@@ -526,24 +533,83 @@ onUnmounted(() => {
   padding-bottom: var(--section-pb-faq);
 }
 .faq-row {
-  gap: var(--faq-row-gap);
+  gap: var(--spacing-sm);  /* mobile */
+}
+@media (min-width: 768px) {
+  .faq-row {
+    gap: 4.75rem;  /* tablet */
+  }
+}
+@media (min-width: 1440px) {
+  .faq-row {
+    gap: var(--faq-row-gap);  /* desktop */
+  }
 }
 
 /* ── Testimonials ────────────────────────────────────────────────────────── */
 .testimonial-quote {
-  max-width: var(--testimonial-quote-max-w);
+  max-width: 100%;  /* fills container on tablet/mobile */
+}
+@media (min-width: 1440px) {
+  .testimonial-quote {
+    max-width: var(--testimonial-quote-max-w);
+  }
 }
 
 /* ── Progress bars ───────────────────────────────────────────────────────── */
+.progress-bar-wrapper {
+  position: absolute;
+  pointer-events: none;
+  z-index: 10;
+  /* Mobile/tablet: bottom-center horizontal */
+  bottom: var(--spacing-lg);
+  left: 50%;
+  transform: translateX(-50%);
+}
+@media (min-width: 1440px) {
+  /* Desktop: right-center vertical */
+  .progress-bar-wrapper {
+    top: 50%;
+    right: var(--spacing-lg);
+    bottom: auto;
+    left: auto;
+    transform: translateY(-50%);
+  }
+}
 .progress-bar-track {
-  @apply relative rounded-full;
-  width: 4px;
-  height: 80px;
+  position: relative;
+  border-radius: 999px;
+  /* Mobile/tablet: horizontal */
+  width: 200px;
+  height: 4px;
   background: rgba(64, 63, 76, 0.2);
 }
+@media (min-width: 1440px) {
+  /* Desktop: vertical */
+  .progress-bar-track {
+    width: 4px;
+    height: 80px;
+  }
+}
 .progress-bar-track--blue {
-  background: var(--color-blue);
-  opacity: 1;
+  background: rgba(255, 255, 255, 0.3);
+}
+.progress-bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 999px;
+  transition: width 0.15s linear, height 0.15s linear;
+  /* Mobile/tablet: grow horizontally */
+  width: calc(var(--ratio, 0) * 200px);
+  height: 100%;
+}
+@media (min-width: 1440px) {
+  /* Desktop: grow vertically */
+  .progress-bar-fill {
+    width: 100%;
+    height: calc(var(--ratio, 0) * 80px);
+  }
 }
 
 /* ── Path cards ───────────────────────────────────────────────────────────── */
@@ -552,13 +618,22 @@ onUnmounted(() => {
 }
 .path-cards {
   display: flex;
+  flex-direction: column;  /* stacked on tablet/mobile */
   align-items: stretch;
   gap: var(--grid-gutter);
   position: relative;
 }
 .path-card-slot {
   flex-shrink: 0;
-  width: calc(50% - var(--grid-gutter) / 2);
+  width: 100%;  /* full-width when stacked */
+}
+@media (min-width: 1440px) {
+  .path-cards {
+    flex-direction: row;
+  }
+  .path-card-slot {
+    width: calc(50% - var(--grid-gutter) / 2);
+  }
 }
 /* reveal-slide.is-visible sets transform:translateY(0) which would make the slot
    a containing block for the absolutely-positioned inner wrapper — override it */
