@@ -29,7 +29,7 @@
 
       <!-- Navbar pill ──────────────────────────────────────────────────────── -->
       <div
-        class="bg-white/80 backdrop-blur-sm pl-8 pr-2 py-2 rounded-[200px] flex items-center justify-between w-full relative"
+        class="backdrop-blur-sm pl-8 pr-2 py-2 rounded-[200px] flex items-center justify-between w-full relative nav-pill"
       >
 
         <!-- 1. Logo ─────────────────────────────────────────────────────────── -->
@@ -187,6 +187,10 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.nav-pill {
+  background: color-mix(in srgb, var(--color-white) 80%, transparent);
+}
+
 nav {
   width: calc(min(var(--container-max), 100vw) - 2 * var(--container-px));
   opacity: 0;
